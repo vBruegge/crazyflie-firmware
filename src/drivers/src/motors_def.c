@@ -831,3 +831,7 @@ const MotorPerifDef* motorMapArbitraryServo =
 {
     &MOTORS_PB4_TIM3_CH1_BRUSHLESS_PP
 };
+/**
+ * Servo mapped to the Bigquad CPPM (MOSI) port
+ */
+ const MotorPerifDef* servoMapMOSI = &MOTORS_PA7_TIM14_CH1_BRUSHLESS_OD;
