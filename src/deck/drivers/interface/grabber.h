@@ -3,6 +3,12 @@
 
 #include "deck_core.h"
 
+enum grabberStates {
+    IDLE = 0,
+    RDY2LAND = 1,
+    LANDED = 2,
+};
+
 void grabberInit(DeckInfo* info);
 
 bool grabberTest(void);

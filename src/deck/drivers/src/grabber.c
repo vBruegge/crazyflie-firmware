@@ -48,6 +48,7 @@ void grabberInit(DeckInfo* info)
   servoInit(&servoMap);
   if(servoTest())
     return;
+  pinMode(DECK_USING_IO_2, INPUT);
 
   isInit = true;
 }
@@ -63,31 +64,26 @@ bool grabberTest(void)
   return testStatus;
 }
 
-//TODO: add Krispin's code
+//TODO: add release input
+bool release = false;
+
+//TODO: add test if throttle != 0
+//TODO: send zero throttle when landed?
 void grabberTask(void* arg)
 {
-  /*systemWaitStart();
-  TickType_t xLastWakeTime;
-
-  xLastWakeTime = xTaskGetTickCount();
+  systemWaitStart();
+  int grabberState = RDY2LAND;
 
   while (1) {
-    vTaskDelayUntil(&xLastWakeTime, M2T(1));
-
-    reading_last = analogReadVoltage(DECK_GPIO_TX2);
-    current_last = reading_last*ampsPerVolt;
-
-    // simple low pass filter
-    current = filter_alpha*current + (1.0f - filter_alpha)*current_last;
-
-    #ifdef CONFIG_DECK_FLAPPER_MEASURE_VBAT_ON_PA3
-    vbat = filter_alpha*vbat + (1.0f - filter_alpha)*pmMeasureExtBatteryVoltage();
-    #else
-    vbat = pmGetBatteryVoltage();
-
-    #endif
-    power = vbat * current;
-  }*/
+    if(digitalRead(DECK_USING_IO_2) && grabberState = RDY2LAND) {
+      servoSetRatio(0);
+      grabberState = LANDED;
+    }
+    if(release && grabberState == LANDED) {
+      servoSetRatio(70);
+      grabberState = RDY2LAND;
+    }
+  }
 }
 
 static const DeckDriver grabber_deck = {
@@ -96,7 +92,7 @@ static const DeckDriver grabber_deck = {
   .name = "grabber",
 
   //TODO: add GPIO pins
-  .usedGpio = DECK_USING_,
+  .usedGpio = DECK_USING_IO_2,
   
   .init = grabberInit,
   .test = grabberTest,

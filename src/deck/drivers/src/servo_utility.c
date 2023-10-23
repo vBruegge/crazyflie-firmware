@@ -80,7 +80,8 @@ void servoDeInit(const MotorPerifDef** motorMapSelect)
 
 bool servoTest(void)
 {
-  return isInit;
+    servoSetRatio(70);
+    return isInit;
 }
 void servoSetRatio(uint16_t driveAngle)
 {
