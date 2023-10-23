@@ -2,6 +2,7 @@
 #include "servo_utility.h"
 
 #include "debug.h"
+#include "motors.h"
 
 static uint16_t act_max = 65535;
 uint16_t servo_ratio = 0; 
@@ -66,10 +67,10 @@ void servoInit(const MotorPerifDef* servoDefSelected) {
     isInit = true;
 
     // Output zero power
-    servoStop(servoDef);
+    servoStop();
 }
 
-void servoDeInit(void)
+void servoDeInit(const MotorPerifDef** motorMapSelect)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
 
@@ -88,11 +89,6 @@ void servoDeInit(void)
 bool servoTest()
 {
     return isInit;
-}
-
-static uint16_t servoBLConv16ToBits(uint16_t bits)
-{
-  return (MOTORS_BL_PWM_CNT_FOR_HIGH + ((bits * MOTORS_BL_PWM_CNT_FOR_HIGH) / 0xFFFF));
 }
 
 void servoSetRatio(uint16_t driveAngle)
@@ -125,4 +121,8 @@ void servoDisablePWM(void)
 void servoStop()
 {
     servoSetRatio(0);
+}
+static uint16_t servoBLConv16ToBits(uint16_t bits)
+{
+  return (MOTORS_BL_PWM_CNT_FOR_HIGH + ((bits * MOTORS_BL_PWM_CNT_FOR_HIGH) / 0xFFFF));
 }

@@ -710,6 +710,28 @@ static const MotorPerifDef MOTORS_PA7_TIM14_CH1_BRUSHLESS_OD =
     .preloadConfig = TIM_OC1PreloadConfig,
 };
 
+// Deck IO3, PB4, TIM3_CH1
+static const MotorPerifDef MOTORS_PB4_TIM3_CH1_BRUSHLESS_PP =
+{
+    .drvType       = BRUSHLESS,
+    .gpioPerif     = RCC_AHB1Periph_GPIOB,
+    .gpioPort      = GPIOB,
+    .gpioPin       = GPIO_Pin_4,
+    .gpioPinSource = GPIO_PinSource4,
+    .gpioOType     = GPIO_OType_PP,
+    .gpioAF        = GPIO_AF_TIM3,
+    .timPerif      = RCC_APB1Periph_TIM3,
+    .tim           = TIM3,
+    .timPolarity   = TIM_OCPolarity_High,
+    .timDbgStop    = DBGMCU_TIM3_STOP,
+    .timPeriod     = MOTORS_BL_PWM_PERIOD,
+    .timPrescaler  = MOTORS_BL_PWM_PRESCALE,
+    .setCompare    = TIM_SetCompare1,
+    .getCompare    = TIM_GetCapture1,
+    .ocInit        = TIM_OC1Init,
+    .preloadConfig = TIM_OC1PreloadConfig,
+};
+
 /**
  * Mapping for Tags that don't have motors.
  * Actually same mapping as for CF2 but the pins are not physically connected.
