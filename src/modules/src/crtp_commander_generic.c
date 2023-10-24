@@ -28,7 +28,6 @@
 #include <string.h>
 
 #include "crtp_commander.h"
-
 #include "commander.h"
 #include "param.h"
 #include "crtp.h"
@@ -171,6 +170,8 @@ static float s_CppmEmuRollMaxAngleDeg = 50.0f; // For level mode
 static float s_CppmEmuPitchMaxAngleDeg = 50.0f; // For level mode
 static float s_CppmEmuYawMaxRateDps = 400.0f; // Used regardless of flight mode
 
+static bool disengageGrabber = false;
+
 struct cppmEmuPacket_s {
   struct {
       uint8_t numAuxChannels : 4;   // Set to 0 through MAX_AUX_RC_CHANNELS
@@ -214,6 +215,10 @@ float getCPPMYawRateScale()
   return s_CppmEmuYawMaxRateDps;
 }
 
+bool getGrabberStatus() {
+  return disengageGrabber;
+}
+
 static void cppmEmuDecoder(setpoint_t *setpoint, uint8_t type, const void *data, size_t datalen)
 {
   bool isSelfLevelEnabled = true;
@@ -226,6 +231,10 @@ static void cppmEmuDecoder(setpoint_t *setpoint, uint8_t type, const void *data,
   // If it's in use, check and see if it's set and enable self-leveling.
   // If aux channel 0 is not in use, default to self-leveling enabled.
   isSelfLevelEnabled = !(values->hdr.numAuxChannels >= 1 && values->channelAux[0] < 1500);
+
+  //receive additional toggles and switches
+  //toggle for disabling grabber
+  disengageGrabber = (values->hdr.numAuxChannels >= 2 && values->channelAux[1] > 1500);
 
   // Set the modes
 

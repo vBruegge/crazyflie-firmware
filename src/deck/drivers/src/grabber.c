@@ -35,6 +35,7 @@
 #include "config.h"
 #include "grabber.h"
 #include "servo_utility.c"
+#include "crtp_commander_generic.c"
 
 static bool isInit;
 
@@ -64,25 +65,24 @@ bool grabberTest(void)
   return testStatus;
 }
 
-//TODO: add release input
-bool release = false;
-
 //TODO: add test if throttle != 0
 //TODO: send zero throttle when landed?
 void grabberTask(void* arg)
 {
   systemWaitStart();
   int grabberState = RDY2LAND;
+  bool disengageGrabber = false;
 
   while (1) {
     if(digitalRead(DECK_USING_IO_2) && grabberState = RDY2LAND) {
       servoSetRatio(0);
       grabberState = LANDED;
     }
-    if(release && grabberState == LANDED) {
+    if(disengageGrabber && grabberState == LANDED) {
       servoSetRatio(70);
       grabberState = RDY2LAND;
     }
+    disengageGrabber = getGrabberStatus();
   }
 }
 
