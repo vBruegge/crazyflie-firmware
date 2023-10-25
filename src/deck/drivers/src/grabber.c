@@ -76,6 +76,7 @@ bool grabberTest(void)
 
 //TODO: add test if throttle != 0
 //TODO: send zero throttle when landed?
+//TODO: add MOSFET
 void grabberTask(void* arg)
 {
   grabberState = IDLE;
@@ -140,7 +141,6 @@ static const DeckDriver grabber_deck = {
 
   //TODO: add GPIO pins
   .usedGpio = DECK_USING_IO_2 | DECK_USING_IO_1,
-
   .init = grabberInit,
   .test = grabberTest,
 };

@@ -67,10 +67,10 @@ void servoInit(const MotorPerifDef* servoDefSelected) {
     isInit = true;
 
     // Output zero power
-    servoStop();
+    servoStop(servoDef);
 }
 
-void servoDeInit(const MotorPerifDef** motorMapSelect)
+void servoDeInit(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
 
@@ -89,6 +89,11 @@ void servoDeInit(const MotorPerifDef** motorMapSelect)
 bool servoTest()
 {
     return isInit;
+}
+
+static uint16_t servoBLConv16ToBits(uint16_t bits)
+{
+  return (MOTORS_BL_PWM_CNT_FOR_HIGH + ((bits * MOTORS_BL_PWM_CNT_FOR_HIGH) / 0xFFFF));
 }
 
 void servoSetRatio(uint16_t driveAngle)
@@ -121,8 +126,4 @@ void servoDisablePWM(void)
 void servoStop()
 {
     servoSetRatio(0);
-}
-static uint16_t servoBLConv16ToBits(uint16_t bits)
-{
-  return (MOTORS_BL_PWM_CNT_FOR_HIGH + ((bits * MOTORS_BL_PWM_CNT_FOR_HIGH) / 0xFFFF));
 }
