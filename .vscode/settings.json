@@ -5,6 +5,9 @@
         "**/bower_components": true
     },
     "files.associations": {
-        "bootloader.h": "c"
+        "bootloader.h": "c",
+        "servo_utility.h": "c",
+        "motors.h": "c",
+        "compare": "c"
     }
 }

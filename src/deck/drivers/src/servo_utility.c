@@ -1,13 +1,17 @@
-#include "motors.h"
+#include "servo_utility.h"
 
 static uint16_t act_max = 65535;
 uint16_t servo_ratio = 0; 
 bool isInit = false;
 
-void servoInit(MotorPerifDef* servoDef) {
-    PIO_InitTypeDef GPIO_InitStructure;
+const MotorPerifDef* servoDef;
+
+void servoInit(const MotorPerifDef* servoDefSelected) {
+    GPIO_InitTypeDef GPIO_InitStructure;
     TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
     TIM_OCInitTypeDef  TIM_OCInitStructure;
+
+    servoDef = servoDefSelected;
 
     MOTORS_RCC_GPIO_CMD(servoDef->gpioPerif, ENABLE);
     MOTORS_RCC_GPIO_CMD(servoDef->gpioPowerswitchPerif, ENABLE);
@@ -59,10 +63,10 @@ void servoInit(MotorPerifDef* servoDef) {
     isInit = true;
 
     // Output zero power
-    servoStop();
+    servoStop(servoDef);
 }
 
-void servoDeInit(const MotorPerifDef** motorMapSelect)
+void servoDeInit(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
 
@@ -78,11 +82,17 @@ void servoDeInit(const MotorPerifDef** motorMapSelect)
     TIM_DeInit(servoDef->tim);
 }
 
-bool servoTest(void)
+bool servoTest()
 {
     servoSetRatio(70);
     return isInit;
 }
+
+static uint16_t servoBLConv16ToBits(uint16_t bits)
+{
+  return (MOTORS_BL_PWM_CNT_FOR_HIGH + ((bits * MOTORS_BL_PWM_CNT_FOR_HIGH) / 0xFFFF));
+}
+
 void servoSetRatio(uint16_t driveAngle)
 {
   if (isInit) {
@@ -113,8 +123,4 @@ void servoDisablePWM(void)
 void servoStop()
 {
     servoSetRatio(0);
-}
-static uint16_t servoBLConv16ToBits(uint16_t bits)
-{
-  return (MOTORS_BL_PWM_CNT_FOR_HIGH + ((bits * MOTORS_BL_PWM_CNT_FOR_HIGH) / 0xFFFF));
 }

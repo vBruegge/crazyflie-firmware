@@ -34,10 +34,14 @@
 #include "debug.h"
 #include "config.h"
 #include "grabber.h"
-#include "servo_utility.c"
-#include "crtp_commander_generic.c"
+#include "motors.h"
+#include "servo_utility.h"
+#include "crtp_commander.h"
 
 static bool isInit;
+static const MotorPerifDef** servoMap = &motorMapArbitraryServo;
+const deckPin_t* mosfetPin = &DECK_GPIO_IO1;
+const deckPin_t* activateGrabberPin = &DECK_GPIO_IO2;
 
 void grabberInit(DeckInfo* info)
 {
@@ -45,11 +49,11 @@ void grabberInit(DeckInfo* info)
     return;
 
   xTaskCreate(grabberTask, GRABBER_TASK_NAME, GRABBER_TASK_STACKSIZE, NULL, GRABBER_TASK_PRI, NULL);
-  MotorPeriDef servoMap = MOTORS_PB4_TIM3_CH1_BRUSHLESS_PP;
-  servoInit(&servoMap);
-  if(servoTest())
+  servoInit(*servoMap);
+  if(servoTest(*servoMap))
     return;
-  pinMode(DECK_USING_IO_2, INPUT);
+  pinMode(*activateGrabberPin, INPUT);
+  pinMode(*mosfetPin, OUTPUT);
 
   isInit = true;
 }
@@ -67,14 +71,16 @@ bool grabberTest(void)
 
 //TODO: add test if throttle != 0
 //TODO: send zero throttle when landed?
+//TODO: add MOSFET
 void grabberTask(void* arg)
 {
   systemWaitStart();
   int grabberState = RDY2LAND;
   bool disengageGrabber = false;
+  digitalWrite(*mosfetPin, HIGH);
 
   while (1) {
-    if(digitalRead(DECK_USING_IO_2) && grabberState = RDY2LAND) {
+    if(digitalRead(*activateGrabberPin) && grabberState == RDY2LAND) {
       servoSetRatio(0);
       grabberState = LANDED;
     }
@@ -92,7 +98,7 @@ static const DeckDriver grabber_deck = {
   .name = "grabber",
 
   //TODO: add GPIO pins
-  .usedGpio = DECK_USING_IO_2,
+  .usedGpio = DECK_USING_IO_2 | DECK_USING_IO_1,
   
   .init = grabberInit,
   .test = grabberTest,
@@ -100,7 +106,7 @@ static const DeckDriver grabber_deck = {
 
 DECK_DRIVER(grabber_deck);
 
-
+/*
 
 PARAM_GROUP_START(deck)
 
@@ -108,18 +114,18 @@ PARAM_ADD_CORE(PARAM_UINT8 | PARAM_RONLY, Grabber, &isInit)
 PARAM_GROUP_STOP(deck)
 
 LOG_GROUP_START(grabber)
-/*LOG_ADD(LOG_FLOAT, vbat, &vbat)
+LOG_ADD(LOG_FLOAT, vbat, &vbat)
 LOG_ADD(LOG_FLOAT, i_raw, &current_last)
 LOG_ADD(LOG_FLOAT, current, &current)
 LOG_ADD(LOG_FLOAT, power, &power)*/
-LOG_GROUP_STOP(grabber)
+//LOG_GROUP_STOP(grabber)
 
 /**
  *
  * Current sensor parameters
- */
+ 
 PARAM_GROUP_START(grabber)
-/**
+
  * @brief Current sensor constant (A/V)
  */
 //PARAM_ADD(PARAM_FLOAT | PARAM_PERSISTENT, ampsPerVolt, &ampsPerVolt)
@@ -128,4 +134,4 @@ PARAM_GROUP_START(grabber)
  */
 //PARAM_ADD(PARAM_FLOAT | PARAM_PERSISTENT, filtAlpha, &filter_alpha)
 
-PARAM_GROUP_STOP(grabber)
+//PARAM_GROUP_STOP(grabber)

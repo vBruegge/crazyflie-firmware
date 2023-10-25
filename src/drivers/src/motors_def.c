@@ -827,11 +827,7 @@ const MotorPerifDef* motorMapCF21Brushless[NBR_OF_MOTORS] =
     &MOTORS_PB10_TIM2_CH3_BRUSHLESS_OD
 };
 
-const MotorPerifDef* motorMapFlapperWithPerchingBrushless[NBR_OF_MOTORS] =
+const MotorPerifDef* motorMapArbitraryServo =
 {
-  &MOTORS_PA1_TIM2_CH2_BRUSHLESS_PP,
-  &MOTORS_PB11_TIM2_CH4_BRUSHLESS_PP,
-  &MOTORS_PA15_TIM2_CH1_BRUSHLESS_PP,
-  &MOTORS_PB10_TIM2_CH3_BRUSHLESS_PP,
-  &
+    &MOTORS_PB4_TIM3_CH1_BRUSHLESS_PP
 };
