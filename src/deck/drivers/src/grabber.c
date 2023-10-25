@@ -71,22 +71,38 @@ bool grabberTest(void)
 
 //TODO: add test if throttle != 0
 //TODO: send zero throttle when landed?
-//TODO: add MOSFET
 void grabberTask(void* arg)
 {
   systemWaitStart();
   int grabberState = RDY2LAND;
   bool disengageGrabber = false;
-  digitalWrite(*mosfetPin, HIGH);
+  digitalWrite(*mosfetPin, LOW);
+  const int actuationTime = 200;
+  TickType_t startServo =  xTaskGetTickCount();
 
   while (1) {
     if(digitalRead(*activateGrabberPin) && grabberState == RDY2LAND) {
+
+      startServo = xTaskGetTickCount();
+      digitalWrite(*mosfetPin, HIGH);
       servoSetRatio(0);
-      grabberState = LANDED;
+      grabberState = ACTIVATING_GRABBER;
     }
-    if(disengageGrabber && grabberState == LANDED) {
+    else if((grabberState == ACTIVATING_GRABBER || grabberState == RELEASING_GRABBER)
+                    && xTaskGetTickCount() > startServo + M2T(actuationTime)) {
+                      
+      digitalWrite(*mosfetPin, LOW);
+      if(grabberState == ACTIVATING_GRABBER)
+        grabberState = LANDED;
+      else
+        grabberState = RDY2LAND;
+    }
+    else if(disengageGrabber && grabberState == LANDED) {
+      startServo = xTaskGetTickCount();
+      digitalWrite(*mosfetPin, HIGH);
+
       servoSetRatio(70);
-      grabberState = RDY2LAND;
+      grabberState = RELEASING_GRABBER;
     }
     disengageGrabber = getGrabberStatus();
   }
