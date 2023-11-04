@@ -731,6 +731,27 @@ static const MotorPerifDef MOTORS_PB4_TIM3_CH1_BRUSHLESS_PP =
     .ocInit        = TIM_OC1Init,
     .preloadConfig = TIM_OC1PreloadConfig,
 };
+// Deck MOSI, PA7, TIM14_CH1, Servo
+static const MotorPerifDef MOTORS_PA7_TIM14_CH1_SERVO =
+{
+    .drvType       = BRUSHLESS,
+    .gpioPerif     = RCC_AHB1Periph_GPIOA,
+    .gpioPort      = GPIOA,
+    .gpioPin       = GPIO_Pin_7,
+    .gpioPinSource = GPIO_PinSource7,
+    .gpioOType     = GPIO_OType_PP,
+    .gpioAF        = GPIO_AF_TIM14,
+    .timPerif      = RCC_APB1Periph_TIM14,
+    .tim           = TIM14,
+    .timPolarity   = TIM_OCPolarity_High,
+    .timDbgStop    = DBGMCU_TIM14_STOP,
+    .timPeriod     = MOTORS_BL_PWM_PERIOD,
+    .timPrescaler  = MOTORS_BL_PWM_PRESCALE,
+    .setCompare    = TIM_SetCompare1,
+    .getCompare    = TIM_GetCapture1,
+    .ocInit        = TIM_OC1Init,
+    .preloadConfig = TIM_OC1PreloadConfig,
+};
 
 /**
  * Mapping for Tags that don't have motors.
@@ -834,4 +855,4 @@ const MotorPerifDef* motorMapArbitraryServo =
 /**
  * Servo mapped to the Bigquad CPPM (MOSI) port
  */
-const MotorPerifDef* servoMapMOSI = &MOTORS_PA7_TIM14_CH1_BRUSHLESS_OD;
+const MotorPerifDef* servoMapMOSI = &MOTORS_PA7_TIM14_CH1_SERVO;
