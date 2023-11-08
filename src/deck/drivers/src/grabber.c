@@ -45,12 +45,13 @@ const deckPin_t* activateGrabberPin = &DECK_GPIO_IO2;
 
 void grabberInit(DeckInfo* info)
 {
+
   if (isInit)
     return;
 
   xTaskCreate(grabberTask, GRABBER_TASK_NAME, GRABBER_TASK_STACKSIZE, NULL, GRABBER_TASK_PRI, NULL);
   servoInit(*servoMap);
-  if(servoTest(*servoMap))
+  if(!servoTest())
     return;
   pinMode(*activateGrabberPin, INPUT);
   pinMode(*mosfetPin, OUTPUT);
@@ -74,6 +75,7 @@ bool grabberTest(void)
 void grabberTask(void* arg)
 {
   systemWaitStart();
+  //servoSetRatio(70);
   int grabberState = RDY2LAND;
   bool disengageGrabber = false;
   digitalWrite(*mosfetPin, LOW);
@@ -111,7 +113,7 @@ void grabberTask(void* arg)
 static const DeckDriver grabber_deck = {
   .vid = 0,
   .pid = 0,
-  .name = "grabber",
+  .name = "bcGrabber",
 
   //TODO: add GPIO pins
   .usedGpio = DECK_USING_IO_2 | DECK_USING_IO_1,
