@@ -1,4 +1,7 @@
+#define DEBUG_MODULE "SERVO_DEBUG"
 #include "servo_utility.h"
+
+#include "debug.h"
 
 static uint16_t act_max = 65535;
 uint16_t servo_ratio = 0; 
@@ -85,6 +88,7 @@ void servoDeInit(void)
 bool servoTest()
 {
     servoSetRatio(70);
+    DEBUG_PRINT("Servo at initial position\n");
     return isInit;
 }
 
