@@ -21,7 +21,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
- * grabber.c: Flapper Nimble+ PCB driver
+* grabber.c: grabber deck driver
  */
 
 #define DEBUG_MODULE "GRABBER_DEBUG"
@@ -37,15 +37,17 @@
 #include "motors.h"
 #include "servo_utility.h"
 #include "crtp_commander.h"
+#include "log.h"
 
 static bool isInit;
 static const MotorPerifDef** servoMap = &motorMapArbitraryServo;
 const deckPin_t* mosfetPin = &DECK_GPIO_IO1;
 const deckPin_t* activateGrabberPin = &DECK_GPIO_IO2;
+static int grabberState = IDLE;
+static bool disengageGrabber = false;
 
 void grabberInit(DeckInfo* info)
 {
-
   if (isInit)
     return;
 
@@ -53,6 +55,7 @@ void grabberInit(DeckInfo* info)
   servoInit(*servoMap);
   if(!servoTest())
     return;
+  
   pinMode(*activateGrabberPin, INPUT);
   pinMode(*mosfetPin, OUTPUT);
 
@@ -74,10 +77,12 @@ bool grabberTest(void)
 //TODO: send zero throttle when landed?
 void grabberTask(void* arg)
 {
+  grabberState = IDLE;
   systemWaitStart();
-  //servoSetRatio(70);
-  int grabberState = RDY2LAND;
-  bool disengageGrabber = false;
+  servoSetRatio(70);
+  DEBUG_PRINT("Servo at initial position\n");
+  grabberState = RDY2LAND;
+
   digitalWrite(*mosfetPin, LOW);
   const int actuationTime = 200;
   TickType_t startServo =  xTaskGetTickCount();
@@ -111,45 +116,21 @@ void grabberTask(void* arg)
 }
 
 static const DeckDriver grabber_deck = {
-  .vid = 0,
-  .pid = 0,
+  .vid = 0x00,
+  .pid = 0x00,
   .name = "bcGrabber",
 
   //TODO: add GPIO pins
   .usedGpio = DECK_USING_IO_2 | DECK_USING_IO_1,
-  
+
   .init = grabberInit,
   .test = grabberTest,
 };
 
 DECK_DRIVER(grabber_deck);
 
-/*
-
-PARAM_GROUP_START(deck)
-
-PARAM_ADD_CORE(PARAM_UINT8 | PARAM_RONLY, Grabber, &isInit)
-PARAM_GROUP_STOP(deck)
 
 LOG_GROUP_START(grabber)
-LOG_ADD(LOG_FLOAT, vbat, &vbat)
-LOG_ADD(LOG_FLOAT, i_raw, &current_last)
-LOG_ADD(LOG_FLOAT, current, &current)
-LOG_ADD(LOG_FLOAT, power, &power)*/
-//LOG_GROUP_STOP(grabber)
-
-/**
- *
- * Current sensor parameters
- 
-PARAM_GROUP_START(grabber)
-
- * @brief Current sensor constant (A/V)
- */
-//PARAM_ADD(PARAM_FLOAT | PARAM_PERSISTENT, ampsPerVolt, &ampsPerVolt)
-/**
- * @brief Current filter parameter <0; 1), set 0 to disable, 0.9999 for max effect 
- */
-//PARAM_ADD(PARAM_FLOAT | PARAM_PERSISTENT, filtAlpha, &filter_alpha)
-
-//PARAM_GROUP_STOP(grabber)
+LOG_ADD(LOG_INT16, grabberState, &grabberState)
+LOG_ADD(LOG_UINT8, disengageGrabber, &disengageGrabber)
+LOG_GROUP_STOP(grabber)

@@ -87,8 +87,6 @@ void servoDeInit(void)
 
 bool servoTest()
 {
-    servoSetRatio(70);
-    DEBUG_PRINT("Servo at initial position\n");
     return isInit;
 }
 
