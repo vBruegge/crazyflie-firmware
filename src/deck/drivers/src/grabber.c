@@ -79,14 +79,19 @@ void grabberTask(void* arg)
 {
   grabberState = IDLE;
   systemWaitStart();
-  servoSetRatio(70);
+  digitalWrite(*mosfetPin, HIGH);
+  const int servoPos = 60;
+  servoSetRatio(servoPos);
+
+  const int actuationTime = 150; //TODO: define delay
+  TickType_t startServo =  xTaskGetTickCount();
+  while(xTaskGetTickCount() < startServo + M2T(actuationTime)) {
+    continue;
+  }
   DEBUG_PRINT("Servo at initial position\n");
   grabberState = RDY2LAND;
-  DEBUG_PRINT("Grabbber ready to land!\n");
-
   digitalWrite(*mosfetPin, LOW);
-  const int actuationTime = 500; //TODO: define delay
-  TickType_t startServo =  xTaskGetTickCount();
+  DEBUG_PRINT("Grabbber ready to land!\n");
 
   while (1) {
     if(digitalRead(*activateGrabberPin) && grabberState == RDY2LAND) {
@@ -114,7 +119,7 @@ void grabberTask(void* arg)
       startServo = xTaskGetTickCount();
       digitalWrite(*mosfetPin, HIGH);
 
-      servoSetRatio(70);
+      servoSetRatio(servoPos);
       grabberState = RELEASING_GRABBER;
       DEBUG_PRINT("Releasing grabber!\n");
     }
