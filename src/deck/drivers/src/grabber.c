@@ -38,6 +38,7 @@
 #include "servo_utility.h"
 #include "crtp_commander.h"
 #include "log.h"
+#include "stabilizer.h"
 
 static bool isInit;
 static const MotorPerifDef** servoMap = &motorMapArbitraryServo;
@@ -79,6 +80,10 @@ void grabberTask(void* arg)
 {
   grabberState = IDLE;
   systemWaitStart();
+  //wait for take-off
+  while(getThrust() < 0.1) {
+    continue;
+  }
   digitalWrite(*mosfetPin, HIGH);
   const int servoPos = 60;
   servoSetRatio(servoPos);
@@ -108,6 +113,7 @@ void grabberTask(void* arg)
       digitalWrite(*mosfetPin, LOW);
       if(grabberState == ACTIVATING_GRABBER) {
         grabberState = LANDED;
+        resetThrust(); //stop flapping
         DEBUG_PRINT("Flapper landed!\n");
       }
       else {
@@ -115,7 +121,7 @@ void grabberTask(void* arg)
         DEBUG_PRINT("Grabbber ready to land!\n");
       }
     }
-    else if(disengageGrabber && grabberState == LANDED) {
+    else if(disengageGrabber && grabberState == LANDED && getThrust() > 0.1) {
       startServo = xTaskGetTickCount();
       digitalWrite(*mosfetPin, HIGH);
 
