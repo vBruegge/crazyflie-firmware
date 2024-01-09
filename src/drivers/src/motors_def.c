@@ -710,49 +710,6 @@ static const MotorPerifDef MOTORS_PA7_TIM14_CH1_BRUSHLESS_OD =
     .preloadConfig = TIM_OC1PreloadConfig,
 };
 
-// Deck IO3, PB4, TIM3_CH1
-static const MotorPerifDef MOTORS_PB4_TIM3_CH1_BRUSHLESS_PP =
-{
-    .drvType       = BRUSHLESS,
-    .gpioPerif     = RCC_AHB1Periph_GPIOB,
-    .gpioPort      = GPIOB,
-    .gpioPin       = GPIO_Pin_4,
-    .gpioPinSource = GPIO_PinSource4,
-    .gpioOType     = GPIO_OType_PP,
-    .gpioAF        = GPIO_AF_TIM3,
-    .timPerif      = RCC_APB1Periph_TIM3,
-    .tim           = TIM3,
-    .timPolarity   = TIM_OCPolarity_High,
-    .timDbgStop    = DBGMCU_TIM3_STOP,
-    .timPeriod     = MOTORS_BL_PWM_PERIOD,
-    .timPrescaler  = MOTORS_BL_PWM_PRESCALE,
-    .setCompare    = TIM_SetCompare1,
-    .getCompare    = TIM_GetCapture1,
-    .ocInit        = TIM_OC1Init,
-    .preloadConfig = TIM_OC1PreloadConfig,
-};
-// Deck MOSI, PA7, TIM14_CH1, Servo
-static const MotorPerifDef MOTORS_PA7_TIM14_CH1_SERVO =
-{
-    .drvType       = BRUSHLESS,
-    .gpioPerif     = RCC_AHB1Periph_GPIOA,
-    .gpioPort      = GPIOA,
-    .gpioPin       = GPIO_Pin_7,
-    .gpioPinSource = GPIO_PinSource7,
-    .gpioOType     = GPIO_OType_PP,
-    .gpioAF        = GPIO_AF_TIM14,
-    .timPerif      = RCC_APB1Periph_TIM14,
-    .tim           = TIM14,
-    .timPolarity   = TIM_OCPolarity_High,
-    .timDbgStop    = DBGMCU_TIM14_STOP,
-    .timPeriod     = MOTORS_BL_PWM_PERIOD,
-    .timPrescaler  = MOTORS_BL_PWM_PRESCALE,
-    .setCompare    = TIM_SetCompare1,
-    .getCompare    = TIM_GetCapture1,
-    .ocInit        = TIM_OC1Init,
-    .preloadConfig = TIM_OC1PreloadConfig,
-};
-
 /**
  * Mapping for Tags that don't have motors.
  * Actually same mapping as for CF2 but the pins are not physically connected.
@@ -855,4 +812,29 @@ const MotorPerifDef* motorMapArbitraryServo =
 /**
  * Servo mapped to the Bigquad CPPM (MOSI) port
  */
-const MotorPerifDef* servoMapMOSI = &MOTORS_PA7_TIM14_CH1_SERVO;
+const MotorPerifDef* servoMapMOSI = &MOTORS_PA7_TIM14_CH1_BRUSHLESS_OD;
+
+/**
+ * Servo mapped to the Bigquad M1 / TX2 port
+ */
+const MotorPerifDef* servoMapTX2 = &MOTORS_PA2_TIM5_CH3_BRUSHLESS_OD;
+
+/**
+ * Servo mapped to the Bigquad M3 / IO2 port
+ */
+const MotorPerifDef* servoMapIO2 = &MOTORS_PB5_TIM3_CH2_BRUSHLESS_OD;
+
+/**
+ * Servo mapped to the Bigquad M2 / IO3 port
+ */
+const MotorPerifDef* servoMapIO3 = &MOTORS_PB4_TIM2_CH1_BRUSHLESS_OD;
+
+/**
+ * Servo mapped to the Bigquad M4 / RX2 port
+ */
+const MotorPerifDef* servoMapRX2 = &MOTORS_PA3_TIM5_CH4_BRUSHLESS_OD;
+
+/**
+ * Servo mapped to IO1 port
+ */
+const MotorPerifDef* servoMapIO1 = &MOTORS_PB8_TIM4_CH3_BRUSHLESS_OD;
