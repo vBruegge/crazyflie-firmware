@@ -81,7 +81,7 @@ void grabberTask(void* arg)
   grabberState = IDLE;
   systemWaitStart();
   //wait for take-off
-  while(getThrust() < 0.1) {
+  while(getThrust() < 0.1f) {
     continue;
   }
   digitalWrite(*mosfetPin, HIGH);
@@ -121,7 +121,7 @@ void grabberTask(void* arg)
         DEBUG_PRINT("Grabbber ready to land!\n");
       }
     }
-    else if(disengageGrabber && grabberState == LANDED && getThrust() > 0.1) {
+    else if(disengageGrabber && grabberState == LANDED && getThrust() > 0.1f) {
       startServo = xTaskGetTickCount();
       digitalWrite(*mosfetPin, HIGH);
 
