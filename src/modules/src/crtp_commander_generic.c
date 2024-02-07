@@ -170,7 +170,7 @@ static float s_CppmEmuRollMaxAngleDeg = 50.0f; // For level mode
 static float s_CppmEmuPitchMaxAngleDeg = 50.0f; // For level mode
 static float s_CppmEmuYawMaxRateDps = 400.0f; // Used regardless of flight mode
 
-static bool disengageGrabber = false;
+static bool activateGrabber = false;
 static int lastGrabberCall = -1;
 
 struct cppmEmuPacket_s {
@@ -217,8 +217,8 @@ float getCPPMYawRateScale()
 }
 
 bool getGrabberStatus() {
-  if(disengageGrabber != lastGrabberCall) {
-    lastGrabberCall = disengageGrabber;
+  if(activateGrabber != lastGrabberCall) {
+    lastGrabberCall = activateGrabber;
     return 1;
   }
   else
@@ -240,9 +240,9 @@ static void cppmEmuDecoder(setpoint_t *setpoint, uint8_t type, const void *data,
 
   //receive additional toggles and switches
   //toggle for disabling grabber
-  disengageGrabber = (values->hdr.numAuxChannels >= 2 && values->channelAux[1] > 1500);
+  activateGrabber = (values->hdr.numAuxChannels >= 2 && values->channelAux[1] > 1500);
   if(lastGrabberCall == -1) {
-    lastGrabberCall = disengageGrabber;
+    lastGrabberCall = activateGrabber;
   }
 
   // Set the modes

@@ -1,5 +1,6 @@
 obj-y += test/
 obj-y += grabber.o
+obj-y += grabber2.o
 obj-y +=servo_utility.o
 #obj-$(CONFIG_DECK_GRABBER) += grabber.o
 #obj-$(CONFIG_DECK_GRABBER) += servo_utility.o
