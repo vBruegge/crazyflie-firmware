@@ -6,7 +6,10 @@
 enum grabberStates {
     IDLE = 0,
     RDY2LAND = 1,
-    LANDED = 2,
+    ACTIVATING_GRABBER = 2,
+    LANDED = 3,
+    ACTIVATING_GRABBER_LANDED = 4,
+    RELEASING_GRABBER = 5,
 };
 
 void grabber2Init(DeckInfo* info);

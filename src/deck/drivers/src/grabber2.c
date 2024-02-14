@@ -84,7 +84,7 @@ void grabber2Task(void* arg)
     systemWaitStart();
     //wait for take-off
     while(getThrust() < 0.1f) {
-    continue;
+      continue;
     }
 
     grabberState = RDY2LAND;
@@ -92,44 +92,56 @@ void grabber2Task(void* arg)
     TickType_t activation;
 
     while (1) {
-        activateGrabber = getGrabberStatus();
-        if(activateGrabber && grabberState == RDY2LAND) {
+      activateGrabber = getGrabberStatus();
+      switch(grabberState) {
+        case RDY2LAND:
+          if(activateGrabber) {
             activation = xTaskGetTickCount();
             digitalWrite(*engageGrabberPin, HIGH);
             DEBUG_PRINT("Activating grabber!\n");
-            while (xTaskGetTickCount() > activation + M2T(ACTIVATION_TIME_MS))
-            {
-                continue;
-            }
+            grabberState = ACTIVATING_GRABBER;
+          }
+          break;
+        case ACTIVATING_GRABBER:
+          if(xTaskGetTickCount() > activation + M2T(ACTIVATION_TIME_MS)) {
             digitalWrite(*engageGrabberPin, LOW);
-
-            grabberState = LANDED;
             DEBUG_PRINT("Flapper landed!\n");
             activation = xTaskGetTickCount();
-        }
-        else if(grabberState == LANDED) {
-            if(activateGrabber) {
-                digitalWrite(*engageGrabberPin, LOW);
-                digitalWrite(*disengageGrabberPin, HIGH);
-                activation = xTaskGetTickCount();
-                DEBUG_PRINT("Releasing grabber!\n");
-                while(xTaskGetTickCount() > activation + M2T(ACTIVATION_TIME_MS)) {
-                    continue;
-                }
-                grabberState = RDY2LAND;
-                DEBUG_PRINT("Grabbber ready to land!\n");
-            }
-            else if(xTaskGetTickCount() > activation + M2T(ACTIVATION_PERIOD_MS)) {
-                digitalWrite(*engageGrabberPin, HIGH);
-                DEBUG_PRINT("Activating grabber!\n");
-                while (xTaskGetTickCount() > activation + M2T(ACTIVATION_TIME_MS + ACTIVATION_PERIOD_MS))
-                {
-                    continue;
-                }
-                digitalWrite(*engageGrabberPin, LOW);
-                activation = xTaskGetTickCount();
-            }
-        }
+            grabberState = LANDED;
+          }
+          break;
+        case LANDED:
+          if(activateGrabber) {
+              digitalWrite(*engageGrabberPin, LOW);
+              digitalWrite(*disengageGrabberPin, HIGH);
+              activation = xTaskGetTickCount();
+              DEBUG_PRINT("Releasing grabber!\n");
+              grabberState = RELEASING_GRABBER;
+          }
+          else if(xTaskGetTickCount() > activation + M2T(ACTIVATION_PERIOD_MS)) {
+            digitalWrite(*engageGrabberPin, HIGH);
+            DEBUG_PRINT("Activating grabber!\n");
+            grabberState = ACTIVATING_GRABBER_LANDED;
+            activation = xTaskGetTickCount();
+          }
+          break;
+        case RELEASING_GRABBER:
+          if(xTaskGetTickCount() > activation + M2T(ACTIVATION_TIME_MS)) {
+              grabberState = RDY2LAND;
+              DEBUG_PRINT("Grabbber ready to land!\n");
+              digitalWrite(*disengageGrabberPin, LOW);
+          }
+          break;
+        case ACTIVATING_GRABBER_LANDED:
+          if (xTaskGetTickCount() > activation + M2T(REACTIVATION_TIME_MS)) {
+            digitalWrite(*engageGrabberPin, LOW);
+            activation = xTaskGetTickCount();
+            grabberState = LANDED;
+          }
+          break;
+        default:
+          break;
+      }
     }
 }
 
