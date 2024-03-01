@@ -860,7 +860,3 @@ const MotorPerifDef* servoMapRX2 = &MOTORS_PA3_TIM5_CH4_BRUSHLESS_OD;
  * Servo mapped to IO1 port
  */
 const MotorPerifDef* servoMapIO1 = &MOTORS_PB8_TIM4_CH3_BRUSHLESS_OD;
-const MotorPerifDef* motorMapArbitraryServo =
-{
-    &MOTORS_PB4_TIM3_CH1_BRUSHLESS_PP
-};
