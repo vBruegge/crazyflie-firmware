@@ -86,10 +86,14 @@ void grabber2Task(void* arg)
     while(getThrust() < 0.1f) {
       continue;
     }
+    digitalWrite(*disengageGrabberPin, HIGH);
+    TickType_t activation = xTaskGetTickCount();
+    while(xTaskGetTickCount() < activation + M2T(ACTIVATION_TIME_MS)) {
+      continue;
+    }
 
     grabberState = RDY2LAND;
     DEBUG_PRINT("Grabbber ready to land!\n");
-    TickType_t activation;
 
     while (1) {
       activateGrabber = getGrabberStatus();
