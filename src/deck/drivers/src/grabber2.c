@@ -115,7 +115,7 @@ void grabber2Task(void* arg)
           }
           break;
         case LANDED:
-          if(activateGrabber) {
+          if(activateGrabber && getThrust() > 0.1f) {
               digitalWrite(*engageGrabberPin, LOW);
               digitalWrite(*disengageGrabberPin, HIGH);
               activation = xTaskGetTickCount();
