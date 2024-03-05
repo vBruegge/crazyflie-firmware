@@ -137,6 +137,14 @@ void grabber2Task(void* arg)
           }
           break;
         case ACTIVATING_GRABBER_LANDED:
+        if(activateGrabber && getThrust() > 0.1f) {
+              digitalWrite(*engageGrabberPin, LOW);
+              digitalWrite(*disengageGrabberPin, HIGH);
+              activation = xTaskGetTickCount();
+              DEBUG_PRINT("Releasing grabber!\n");
+              grabberState = RELEASING_GRABBER;
+              break;
+          }
           if (xTaskGetTickCount() > activation + M2T(REACTIVATION_TIME_MS)) {
             digitalWrite(*engageGrabberPin, LOW);
             activation = xTaskGetTickCount();
