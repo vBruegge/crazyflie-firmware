@@ -40,11 +40,11 @@
 
 #define ACTIVATION_PERIOD_MS 60*1e3
 #define REACTIVATION_TIME_MS 500
-#define ACTIVATION_TIME_MS 800
+#define ACTIVATION_TIME_MS 2000
 
 static bool isInit;
-const deckPin_t* engageGrabberPin = &DECK_GPIO_IO2;
-const deckPin_t* disengageGrabberPin = &DECK_GPIO_IO1;
+const deckPin_t* engageGrabberPin = &DECK_GPIO_IO2; //PB5
+const deckPin_t* disengageGrabberPin = &DECK_GPIO_IO1; //PB8
 static int grabberState = IDLE;
 static bool activateGrabber = false;
 
@@ -93,6 +93,7 @@ void grabber2Task(void* arg)
     }
 
     grabberState = RDY2LAND;
+    digitalWrite(*disengageGrabberPin, LOW);
     DEBUG_PRINT("Grabbber ready to land!\n");
 
     while (1) {
@@ -115,7 +116,7 @@ void grabber2Task(void* arg)
           }
           break;
         case LANDED:
-          if(activateGrabber && getThrust() > 0.1f) {
+          if(activateGrabber) {
               digitalWrite(*engageGrabberPin, LOW);
               digitalWrite(*disengageGrabberPin, HIGH);
               activation = xTaskGetTickCount();
@@ -134,7 +135,7 @@ void grabber2Task(void* arg)
               grabberState = RDY2LAND;
               DEBUG_PRINT("Grabbber ready to land!\n");
               digitalWrite(*disengageGrabberPin, LOW);
-          }
+          } 
           break;
         case ACTIVATING_GRABBER_LANDED:
         if(activateGrabber && getThrust() > 0.1f) {
