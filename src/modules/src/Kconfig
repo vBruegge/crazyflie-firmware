@@ -197,7 +197,7 @@ config POWER_DISTRIBUTION_QUADROTOR
         Power distribution function for quadrotors
 config POWER_DISTRIBUTION_FLAPPER
     bool "Flapper Nimble+ power distribution"
-    depends on PLATFORM_FLAPPER
+    depends on PLATFORM_FLAPPER || PLATFORM_GRABBER || PLATFORM_GRABBER2
     help
         Power distribution function for Flapper Nimble+
 
