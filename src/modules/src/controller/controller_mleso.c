@@ -81,7 +81,7 @@ bool controllerMLESOTest(void)
   return isInit;
 }
 
-static float capAngle(float angle)
+/*static float capAngle(float angle)
 {
   float result = angle;
 
@@ -96,7 +96,7 @@ static float capAngle(float angle)
   }
 
   return result;
-}
+}*/
 
 void controllerMLESO(control_t *control, const setpoint_t *setpoint,
                      const sensorData_t *sensors,
@@ -159,8 +159,4 @@ LOG_ADD(LOG_FLOAT, actuatorThrust, &actuatorThrust)
 /**
  * @brief Desired roll setpoint
  */
-/**
- * @brief Desired yaw rate setpoint
- */
-LOG_ADD(LOG_FLOAT, yawRate, &rateDesired.yaw)
 LOG_GROUP_STOP(controller)
