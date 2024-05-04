@@ -166,17 +166,17 @@ typedef struct {
 #ifndef UNIT_TEST_MODE
 
 #define LOG_ADD(TYPE, NAME, ADDRESS) \
-   { .type = TYPE, .name = #NAME, .address = (void*)(ADDRESS), },
+   { .type = TYPE, .name = (char*)#NAME, .address = (void*)(ADDRESS), },
 
 #define LOG_ADD_CORE(TYPE, NAME, ADDRESS) \
   LOG_ADD(TYPE | LOG_CORE, NAME, ADDRESS)
 
 #define LOG_ADD_BY_FUNCTION(TYPE, NAME, ADDRESS) \
-   { .type = TYPE | LOG_BY_FUNCTION, .name = #NAME, .address = (void*)(ADDRESS), },
+   { .type = TYPE | LOG_BY_FUNCTION, .name = (char*)#NAME, .address = (void*)(ADDRESS), },
 
 #define LOG_ADD_GROUP(TYPE, NAME, ADDRESS) \
    { \
-  .type = TYPE, .name = #NAME, .address = (void*)(ADDRESS), },
+  .type = TYPE, .name = (char*)#NAME, .address = (void*)(ADDRESS), },
 
 #define LOG_GROUP_START(NAME)  \
   static const struct log_s __logs_##NAME[] __attribute__((section(".log." #NAME), used)) = { \

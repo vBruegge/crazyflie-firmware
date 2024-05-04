@@ -74,6 +74,7 @@ compiler:
       - 'vendor/cmock/src/'
       - 'vendor/libdw1000/inc/'
       - 'vendor/unity/src/'
+      - 'vendor/eigen/'
   defines:
     prefix: '-D'
     items:
