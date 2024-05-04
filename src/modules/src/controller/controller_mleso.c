@@ -159,23 +159,6 @@ LOG_ADD(LOG_FLOAT, actuatorThrust, &actuatorThrust)
 /**
  * @brief Desired roll setpoint
  */
-LOG_ADD(LOG_FLOAT, roll, &attitudeDesired.roll)
-/**
- * @brief Desired pitch setpoint
- */
-LOG_ADD(LOG_FLOAT, pitch, &attitudeDesired.pitch)
-/**
- * @brief Desired yaw setpoint
- */
-LOG_ADD(LOG_FLOAT, yaw, &attitudeDesired.yaw)
-/**
- * @brief Desired roll rate setpoint
- */
-LOG_ADD(LOG_FLOAT, rollRate, &rateDesired.roll)
-/**
- * @brief Desired pitch rate setpoint
- */
-LOG_ADD(LOG_FLOAT, pitchRate, &rateDesired.pitch)
 /**
  * @brief Desired yaw rate setpoint
  */
