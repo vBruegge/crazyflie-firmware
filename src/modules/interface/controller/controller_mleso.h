@@ -27,6 +27,7 @@
 #define __CONTROLLER_MLESO_H__
 
 #include "stabilizer_types.h"
+#include <Eigen/Core>
 
 void controllerMLESOInit(void);
 bool controllerMLESOTest(void);
@@ -34,5 +35,25 @@ void controllerMLESO(control_t *control, const setpoint_t *setpoint,
                                          const sensorData_t *sensors,
                                          const state_t *state,
                                          const stabilizerStep_t stabilizerStep);
+void getStateFeedback(Eigen::Vector4f& stateFeedback, const Eigen::VectorXf& state);
+void convertFromMotorCmd2ActCmd(Eigen::Vector4f& act_cmd);
+void convertFromActCmd2MotorCmd(Eigen::Vector4f& act_cmd);
+Eigen::Vector4f mlesoModel(Eigen::Vector4f& act_cmd, Eigen::VectorXf stateP);
+
+/**
+ * Reset controller roll feedback PID
+ */
+void mlesoControllerResetRollFeedbackPID(void);
+
+/**
+ * Reset controller pitch Feedback PID
+ */
+void mlesoControllerResetPitchFeedbackPID(void);
+
+/**
+ * Reset controller roll, pitch and yaw PID's.
+ */
+void mlesoControllerResetAllPID(void);
+
 
 #endif //__CONTROLLER_MLESO_H__

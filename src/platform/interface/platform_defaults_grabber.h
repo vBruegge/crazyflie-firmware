@@ -14,7 +14,7 @@
  * the Free Software Foundation, in version 3.
  *
  * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * but WITHOUT ANY WARRANTY},{without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
@@ -168,7 +168,48 @@
 #define PID_FEEDBACK_YAW_KFF 0
 #define PID_FEEDBACK_YAW_INTEGRATION_LIMIT     166.7
 
-#define MLESO_GAIN_THROTTLE 1.325
-#define MLESO_GAIN_ROLL 9.43*360.0/__UINT16_MAX__
-#define MLESO_GAIN_PITCH 33.6*360.0/__UINT16_MAX__
-#define MLESO_GAIN_YAW 1.762*360.0/__UINT16_MAX__
+#define MLESO_GAIN_THROTTLE 1.325f
+#define MLESO_GAIN_ROLL 9.43f*360.0f/__UINT16_MAX__
+#define MLESO_GAIN_PITCH 33.6f*360.0f/__UINT16_MAX__
+#define MLESO_GAIN_YAW 1.762f*360.0f/__UINT16_MAX__
+
+#define A_REF {{-10, 0, 0,0,-250,0,-5,0,0},\
+    {0,-10,0,250,0,0,0,-5,0},\
+    {0,0,-30,0,-3,0,0,0,-1},\
+    {0,0.03,0,-4,0,0,0,-0.2,0},\
+    {-0.003,0,0,0,-3,0,0.2,0,0},\
+    {0,0,0,0,0,-1.5,0,0,0},\
+    {1,0,0,0,0,0,0,0,0},\
+    {0,1,0,0,0,0,0,0,0},\
+    {0,0,1,0,0,0,0,0,0},}
+
+#define B_P {{-472.5283,	472.5283,	0,	-6.0254},\
+    {-1.0435,	-1.0435,	-78.5132,	0},\
+    {-34.0026,	34.0026,	0,	-234.4742},\
+    {-0.5545,	-0.5545,	-0.0036212,	0},\
+    {-0.0071,	-0.0071,	0.14639,	0.01057},\
+    {-0.39834,	0.39834,	0, 	0.00793},\
+    {0,0,0,0},\
+    {0,0,0,0},\
+    {0,0,0,0},}
+
+#define L0_EST {{-250, 0, 0, 0, 0, 0, 0, 0, 0},\
+    {0, -250.000000000000, 0, 0, 0, 0, 0, 0, 0},\
+    {0, 0, -250, 0, 0, 0, 0, 0, 0},\
+    {0, 0, 0, -250, 0, 0, 0, 0, 0},\
+    {0, 0, 0, 0, -250, 0, 0, 0, 0},\
+    {0, 0, 0, 0, 0, -250.000000000000, 0, 0, 0},\
+    {0, 0, 0, 0, 0, 0, -250, 0, 0},\
+    {0, 0, 0, 0, 0, 0, 0, -250, 0},\
+    {0, 0, 0, 0, 0, 0, 0, 0, -250},}
+
+#define M0_EST {{0.26502, -0.0104, -0.0068212, 225.4546, 0, -0.0104, 0, 0, 0},\
+    {0.26502, -0.0104, -0.0068224, 225.4546, 0, -0.0104, 0, 0, 0},\
+    {0.002697, 3.18445, -0.000177, -5.9928, 0, -3.18445, 0, 0, 0},\
+    {-0.076866, 0, 1.06819, 0, 0, 0, 0, 0, 0},\
+    {0.0004176, -0.4663055, -0.011266, 4.072963, -250, 0.4663, 0, 0, 0},\
+    {0.21175, 0, -0.0139, 0, 0, -250, 0, 0, 0},\
+    {0, 0, 0, 0, 0, 0, -250, 0, 0},\
+    {0, 0, 0, 0, 0, 0, 0, -250, 0},\
+    {0, 0, 0, 0, 0, 0, 0, 0, -250},}
+
