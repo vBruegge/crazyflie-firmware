@@ -9,6 +9,7 @@
 #include "param.h"
 #include "math3d.h"
 
+#include <Eigen/Geometry>
 
 #define UPDATE_DT (float)(1.0f / ATTITUDE_RATE)
 static bool rateFiltEnable = ATTITUDE_RATE_LPF_ENABLE;
@@ -104,6 +105,9 @@ void controllerMLESO(control_t *control, const setpoint_t *setpoint,
                      const stabilizerStep_t stabilizerStep)
 {
   control->controlMode = controlModeLegacy;
+
+  Eigen::Vector4f setpoint_eigen = {setpoint->thrust, setpoint->attitude.roll,
+      setpoint->attitude.pitch, setpoint->attitudeRate.yaw};
 
   if (RATE_DO_EXECUTE(ATTITUDE_RATE, stabilizerStep)) {
     
