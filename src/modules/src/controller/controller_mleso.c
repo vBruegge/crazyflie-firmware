@@ -8,8 +8,7 @@
 #include "log.h"
 #include "param.h"
 #include "math3d.h"
-#include "Eigen/Core"
-#include "Eigen/LU"
+
 
 #define UPDATE_DT (float)(1.0f / ATTITUDE_RATE)
 static bool rateFiltEnable = ATTITUDE_RATE_LPF_ENABLE;
@@ -60,6 +59,8 @@ PidObject pidFeedbackYaw = {
     .kff = PID_FEEDBACK_YAW_KFF,
 };
 
+const Eigen::
+
 void controllerMLESOInit(void)
 {
   if (isInit)
@@ -105,15 +106,12 @@ void controllerMLESO(control_t *control, const setpoint_t *setpoint,
 {
   control->controlMode = controlModeLegacy;
 
+  Eigen::Vector4f setpoint = {setpoint->thrust, setpoint->attitude.roll,
+      setpoint->attitude.pitch, setpoint->attitude_rate.yaw};
+
   if (RATE_DO_EXECUTE(ATTITUDE_RATE, stabilizerStep)) {
-    // Switch between manual and automatic position control
-    if (setpoint->mode.z == modeDisable) {
-      actuatorThrust = setpoint->thrust;
-    }
-    if (setpoint->mode.x == modeDisable || setpoint->mode.y == modeDisable || setpoint->mode.z == modeDisable) {
-      attitudeDesired.roll = setpoint->attitude.roll;
-      attitudeDesired.pitch = setpoint->attitude.pitch;
-    }
+    
+    
 
     
   }
