@@ -59,7 +59,6 @@ PidObject pidFeedbackYaw = {
     .kff = PID_FEEDBACK_YAW_KFF,
 };
 
-const Eigen::
 
 void controllerMLESOInit(void)
 {
@@ -105,9 +104,6 @@ void controllerMLESO(control_t *control, const setpoint_t *setpoint,
                      const stabilizerStep_t stabilizerStep)
 {
   control->controlMode = controlModeLegacy;
-
-  Eigen::Vector4f setpoint = {setpoint->thrust, setpoint->attitude.roll,
-      setpoint->attitude.pitch, setpoint->attitude_rate.yaw};
 
   if (RATE_DO_EXECUTE(ATTITUDE_RATE, stabilizerStep)) {
     
