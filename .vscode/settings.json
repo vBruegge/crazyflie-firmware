@@ -8,6 +8,9 @@
         "bootloader.h": "c",
         "servo_utility.h": "c",
         "motors.h": "c",
-        "compare": "c"
+        "compare": "c",
+        "stabilizer_types.h": "c",
+        "math3d.h": "c",
+        "core_cm3.h": "c"
     }
 }

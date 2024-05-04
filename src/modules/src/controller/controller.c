@@ -53,6 +53,8 @@ void controllerInit(ControllerType controller) {
     #define CONTROLLER ControllerTypeMellinger
   #elif defined(CONFIG_CONTROLLER_BRESCIANINI)
     #define CONTROLLER ControllerTypeBrescianini
+  #elif defined(CONFIG_CONTROLLER_MLESO)
+    #define CONTROLLER ControllerTypeMLESO
   #else
     #define CONTROLLER ControllerTypeAutoSelect
   #endif
