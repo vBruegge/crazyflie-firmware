@@ -269,7 +269,7 @@ static void stabilizerTask(void* param)
 {
   stabilizerStep_t stabilizerStep;
   uint32_t lastWakeTime;
-  vTaskSetApplicationTaskTag(0, (void*)TASK_STABILIZER_ID_NBR);
+  vTaskSetApplicationTaskTag(0, (TaskHookFunction_t)TASK_STABILIZER_ID_NBR);
 
   //Wait for the system to be fully started to start stabilization loop
   systemWaitStart();
