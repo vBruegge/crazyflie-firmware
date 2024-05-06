@@ -11,6 +11,7 @@
         "compare": "c",
         "stabilizer_types.h": "c",
         "math3d.h": "c",
-        "core_cm3.h": "c"
+        "core_cm3.h": "c",
+        "*.tcc": "c"
     }
 }

@@ -7,6 +7,8 @@
 #include "controller_mellinger.h"
 #include "controller_indi.h"
 #include "controller_brescianini.h"
+#include "controller_mleso.h"
+
 
 #include "autoconf.h"
 
@@ -28,6 +30,7 @@ static ControllerFcns controllerFunctions[] = {
   {.init = controllerMellingerFirmwareInit, .test = controllerMellingerFirmwareTest, .update = controllerMellingerFirmware, .name = "Mellinger"},
   {.init = controllerINDIInit, .test = controllerINDITest, .update = controllerINDI, .name = "INDI"},
   {.init = controllerBrescianiniInit, .test = controllerBrescianiniTest, .update = controllerBrescianini, .name = "Brescianini"},
+  {.init = controllerMLESOInit, .test = controllerMLESOTest, .update = controllerMLESO, .name = "MLESO"},
   #ifdef CONFIG_CONTROLLER_OOT
   {.init = controllerOutOfTreeInit, .test = controllerOutOfTreeTest, .update = controllerOutOfTree, .name = "OutOfTree"},
   #endif

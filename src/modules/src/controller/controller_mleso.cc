@@ -1,7 +1,9 @@
+#define DEBUG_MODULE "MLESO_DEBUG"
 
 #include "stabilizer_types.h"
 
 #include "pid.h"
+#include "debug.h"
 #include "controller_mleso.h"
 #include "platform_defaults.h"
 
@@ -81,6 +83,7 @@ void controllerMLESOInit(void)
 {
   if (isInit)
     return;
+  DEBUG_PRINT("Initializing");
 
   pidInit(&pidFeedbackRoll, 0, pidFeedbackRoll.kp, pidFeedbackRoll.ki, pidFeedbackRoll.kd,
           pidFeedbackRoll.kff, UPDATE_DT, ATTITUDE_RATE, omxFiltCutoff, rateFiltEnable);
@@ -93,6 +96,7 @@ void controllerMLESOInit(void)
   pidSetDesired(&pidFeedbackYaw, 0.0f);
 
   stateP_hat << 0, 0, 0, 0, 0, 0, 0, 0, 0;
+  DEBUG_PRINT("controller initialized");
 
   isInit = true;
 }
@@ -198,7 +202,7 @@ void controllerMLESO(control_t *control, const setpoint_t *setpoint,
     r_pitch = -radians(sensors->gyro.y);
     r_yaw = radians(sensors->gyro.z);
     accelz = sensors->acc.z;
-
+    control->thrust = 0;
     if (control->thrust == 0)
     {
       control->thrust = 0;
