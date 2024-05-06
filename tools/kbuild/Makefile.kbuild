@@ -277,7 +277,7 @@ firmwareINCLUDE    := \
 		$(if $(KBUILD_SRC), -I$(srctree)/include) \
 		-Iinclude -include include/generated/autoconf.h
 
-KBUILD_CPPFLAGS := -D__firmware__ -fno-exceptions
+KBUILD_CPPFLAGS := -D__firmware__ -fno-exceptions -fpermissive
 
 KBUILD_CFLAGS   := -Wall -Wmissing-braces \
 		   -fno-strict-aliasing -ffunction-sections \
