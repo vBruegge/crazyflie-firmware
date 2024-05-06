@@ -27,6 +27,8 @@
 
 #include <math.h>
 
+extern "C" {
+
 #include "FreeRTOS.h"
 #include "task.h"
 
@@ -37,8 +39,6 @@
 #include "motors.h"
 #include "pm.h"
 #include "platform.h"
-
-#include "stabilizer.h"
 
 #include "sensors.h"
 #include "commander.h"
@@ -56,6 +56,12 @@
 #include "statsCnt.h"
 #include "static_mem.h"
 #include "rateSupervisor.h"
+
+}
+
+#include "stabilizer.h"
+
+
 
 static bool isInit;
 
