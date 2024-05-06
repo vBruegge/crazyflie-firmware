@@ -109,7 +109,7 @@ typedef float * (*paramGetterFloat)(void);
 #define PARAM_ADD_FULL(TYPE, NAME, ADDRESS, CALLBACK, DEFAULT_GETTER) \
     { .type = ((TYPE) <= 0xFF) ? (TYPE) : (((TYPE) | PARAM_EXTENDED) & 0xFF), \
       .extended_type = (((TYPE) & 0xFF00) >> 8), \
-      .name = #NAME, \
+      .name = (char*)#NAME, \
       .address = (void*)(ADDRESS), \
       .callback = (void *)CALLBACK, \
       .getter = (void *)DEFAULT_GETTER, },
@@ -129,7 +129,7 @@ typedef float * (*paramGetterFloat)(void);
 
 #define PARAM_ADD_GROUP(TYPE, NAME, ADDRESS) \
   { \
-  .type = TYPE, .name = #NAME, .address = (void*)(ADDRESS), .callback = 0, .getter = 0, },
+  .type = TYPE, .name = (char*)#NAME, .address = (void*)(ADDRESS), .callback = 0, .getter = 0, },
 
 #define PARAM_GROUP_STOP(NAME) \
   PARAM_ADD_GROUP(PARAM_GROUP | PARAM_STOP, stop_##NAME, 0x0) \
