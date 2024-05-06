@@ -34,12 +34,12 @@
 
 #ifdef DEBUG
 #define IF_DEBUG_ASSERT(e)  if (e) ; \
-        else assertFail( #e, __FILE__, __LINE__ )
+        else assertFail( (char*)#e, (char*)__FILE__, __LINE__ )
 #else
 #define IF_DEBUG_ASSERT(e)
 #endif
 
-#define ASSERT_FAILED() assertFail( "", __FILE__, __LINE__ )
+#define ASSERT_FAILED() assertFail( (char*)"", (char*)__FILE__, __LINE__ )
 
 /**
  * @brief Assert that verifies that a pointer is pointing at memory that can be

@@ -1,15 +1,20 @@
 #define DEBUG_MODULE "MLESO_DEBUG"
 
+extern "C" {
+
 #include "stabilizer_types.h"
 
 #include "pid.h"
 #include "debug.h"
-#include "controller_mleso.h"
 #include "platform_defaults.h"
 
 #include "log.h"
 #include "param.h"
 #include "math3d.h"
+
+}
+
+#include "controller_mleso.h"
 
 #include <Eigen/Core>
 

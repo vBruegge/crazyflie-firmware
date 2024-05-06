@@ -1,4 +1,7 @@
 #define DEBUG_MODULE "CONTROLLER"
+
+extern "C" {
+
 #include "debug.h"
 
 #include "cfassert.h"
@@ -7,10 +10,12 @@
 #include "controller_mellinger.h"
 #include "controller_indi.h"
 #include "controller_brescianini.h"
-#include "controller_mleso.h"
-
 
 #include "autoconf.h"
+
+}
+
+#include "controller_mleso.h"
 
 #define DEFAULT_CONTROLLER ControllerTypePID
 static ControllerType currentController = ControllerTypeAutoSelect;

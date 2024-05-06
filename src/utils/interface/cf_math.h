@@ -29,7 +29,9 @@
 // unit tests. We hide them to avoid noise.
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"
+#ifndef __cplusplus
 #pragma GCC diagnostic ignored "-Wpointer-to-int-cast"
+#endif
 #pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "arm_math.h"

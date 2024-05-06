@@ -31,6 +31,10 @@
 
 #include "estimator.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * Initialize the stabilizer subsystem and launch the stabilizer loop task.
  * The stabilizer loop task will wait on systemWaitStart() before running.
@@ -46,5 +50,9 @@ bool stabilizerTest(void);
 
 float getThrust();
 void resetThrust();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* STABILIZER_H_ */
