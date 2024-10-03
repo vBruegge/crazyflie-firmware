@@ -1,9 +1,10 @@
 
 #include "stabilizer_types.h"
 
-#include "attitude_controller.h"
+#include "controller_mleso.h"
 #include "position_controller.h"
 #include "controller_pid.h"
+#include <Eigen/Core>
 
 #include "log.h"
 #include "param.h"
@@ -24,9 +25,11 @@ static float r_pitch;
 static float r_yaw;
 static float accelz;
 
+static Eigen::Vector3d test;
+
 void controllerPidInit(void)
 {
-  attitudeControllerInit(ATTITUDE_UPDATE_DT);
+  mlesoControllerInit(ATTITUDE_UPDATE_DT);
   positionControllerInit();
 }
 
@@ -34,7 +37,7 @@ bool controllerPidTest(void)
 {
   bool pass = true;
 
-  pass &= attitudeControllerTest();
+  pass &= mlesoControllerTest();
 
   return pass;
 }
@@ -65,7 +68,7 @@ void controllerPid(control_t *control, const setpoint_t *setpoint,
     if (setpoint->mode.yaw == modeVelocity) {
       attitudeDesired.yaw = capAngle(attitudeDesired.yaw + setpoint->attitudeRate.yaw * ATTITUDE_UPDATE_DT);
 
-      float yawMaxDelta = attitudeControllerGetYawMaxDelta();
+      float yawMaxDelta = mlesoControllerGetYawMaxDelta();
       if (yawMaxDelta != 0.0f)
       {
       float delta = capAngle(attitudeDesired.yaw-state->attitude.yaw);
@@ -104,7 +107,7 @@ void controllerPid(control_t *control, const setpoint_t *setpoint,
       attitudeDesired.pitch = setpoint->attitude.pitch;
     }
 
-    attitudeControllerCorrectAttitudePID(state->attitude.roll, state->attitude.pitch, state->attitude.yaw,
+    mlesoControllerCorrectAttitudePID(state->attitude.roll, state->attitude.pitch, state->attitude.yaw,
                                 attitudeDesired.roll, attitudeDesired.pitch, attitudeDesired.yaw,
                                 &rateDesired.roll, &rateDesired.pitch, &rateDesired.yaw);
 
@@ -113,18 +116,18 @@ void controllerPid(control_t *control, const setpoint_t *setpoint,
     // behavior if level mode is engaged later
     if (setpoint->mode.roll == modeVelocity) {
       rateDesired.roll = setpoint->attitudeRate.roll;
-      attitudeControllerResetRollAttitudePID(state->attitude.roll);
+      mlesoControllerResetRollAttitudePID(state->attitude.roll);
     }
     if (setpoint->mode.pitch == modeVelocity) {
       rateDesired.pitch = setpoint->attitudeRate.pitch;
-      attitudeControllerResetPitchAttitudePID(state->attitude.pitch);
+      mlesoControllerResetPitchAttitudePID(state->attitude.pitch);
     }
 
     // TODO: Investigate possibility to subtract gyro drift.
-    attitudeControllerCorrectRatePID(sensors->gyro.x, -sensors->gyro.y, sensors->gyro.z,
+    mlesoControllerCorrectRatePID(sensors->gyro.x, -sensors->gyro.y, sensors->gyro.z,
                              rateDesired.roll, rateDesired.pitch, rateDesired.yaw);
 
-    attitudeControllerGetActuatorOutput(&control->roll,
+    mlesoControllerGetActuatorOutput(&control->roll,
                                         &control->pitch,
                                         &control->yaw);
 
@@ -154,7 +157,7 @@ void controllerPid(control_t *control, const setpoint_t *setpoint,
     cmd_pitch = control->pitch;
     cmd_yaw = control->yaw;
 
-    attitudeControllerResetAllPID(state->attitude.roll, state->attitude.pitch, state->attitude.yaw);
+    mlesoControllerResetAllPID(state->attitude.roll, state->attitude.pitch, state->attitude.yaw);
     positionControllerResetAllPID(state->position.x, state->position.y, state->position.z);
 
     // Reset the calculated YAW angle for rate control
