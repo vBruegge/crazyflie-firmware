@@ -161,6 +161,18 @@ config DECK_FLAPPER
     help
         Enables Flapper Nimble+ PCB with current measurements via ADC on PA2/TX2 and external receiver.
 
+config DECK_SERVO_GRIPPER
+    bool "Enable Servo Gripper for Flapper Nimble+ PCB functionality"
+    default n
+    help
+        Enables Servo Gripper for Flapper Nimble+ PCB
+
+config DECK_SPRING_GRIPPER
+    bool "Enable Spring Gripper for Flapper Nimble+ PCB functionality"
+    default n
+    help
+        Enables Spring Gripper for Flapper Nimble+ PCB
+
 config DECK_FLAPPER_MEASURE_VBAT_ON_PA3
     bool "Measure VBAT on PA3"
     default n
