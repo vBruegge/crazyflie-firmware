@@ -150,6 +150,8 @@
 
 #define YAW_MAX_DELTA 30.0
 
+#ifdef CONFIG_CONTROLLER_MLESO
+
 #define PID_FEEDBACK_ROLL_KP  1.0
 #define PID_FEEDBACK_ROLL_KI  7.5
 #define PID_FEEDBACK_ROLL_KD  0.0
@@ -168,12 +170,10 @@
 #define PID_FEEDBACK_YAW_KFF 0
 #define PID_FEEDBACK_YAW_INTEGRATION_LIMIT     166.7
 
-#ifdef CONFIG_CONTROLLER_MLESO
-
-#define MLESO_GAIN_THROTTLE 1.325f
-#define MLESO_GAIN_ROLL 9.43f*360.0f/__UINT16_MAX__
-#define MLESO_GAIN_PITCH 33.6f*360.0f/__UINT16_MAX__
-#define MLESO_GAIN_YAW 1.762f*360.0f/__UINT16_MAX__
+#define K_R {{1.325f, 0, 0, 0},\
+    {0, 9.43f, 0, 0},\
+    {0, 0, 33.6f, 0},\
+    {0, 0, 0, 1.762f}}
 
 #define A_REF {{-10, 0, 0,0,-250,0,-5,0,0},\
     {0,-10,0,250,0,0,0,-5,0},\
