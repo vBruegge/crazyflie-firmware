@@ -21,41 +21,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
- * controller.h - Controller interface
+ * controller_mleso.h - Mleso Controller Interface
  */
-#ifndef __CONTROLLER_H__
-#define __CONTROLLER_H__
+#ifndef __CONTROLLER_MLESO_H__
+#define __CONTROLLER_MLESO_H__
 
 #include "stabilizer_types.h"
+#include "math_nd.h"
 
-typedef enum {
-  ControllerTypeAutoSelect,
-  ControllerTypePID,
-  ControllerTypeMellinger,
-  ControllerTypeINDI,
-  ControllerTypeBrescianini,
-  ControllerTypeLee,
-  ControllerTypeMleso,
-#ifdef CONFIG_CONTROLLER_OOT
-  ControllerTypeOot,
-#endif
-  ControllerType_COUNT,
-} ControllerType;
-
-void controllerInit(ControllerType controller);
-bool controllerTest(void);
-void controller(control_t *control, const setpoint_t *setpoint,
+void controllerMlesoInit(void);
+bool controllerMlesoTest(void);
+void controllerMleso(control_t *control, const setpoint_t *setpoint,
                                          const sensorData_t *sensors,
                                          const state_t *state,
                                          const stabilizerStep_t stabilizerStep);
-ControllerType controllerGetType(void);
-const char* controllerGetName();
+struct vecX getStateFeedback(const struct vecX state);
+struct vecX convert2ActCmd(struct vecX act_cmd);
+struct vecX convert2PWMCmd(struct vecX act_cmd);
+struct vecX mlesoModel(struct vecX act_cmd, struct vecX stateP);
+
+/**
+ * Reset controller roll feedback PID
+ */
+void mlesoControllerResetRollFeedbackPID(void);
+
+/**
+ * Reset controller pitch Feedback PID
+ */
+void mlesoControllerResetPitchFeedbackPID(void);
+
+/**
+ * Reset controller roll, pitch and yaw PID's.
+ */
+void mlesoControllerResetAllPID(void);
 
 
-#ifdef CONFIG_CONTROLLER_OOT
-void controllerOutOfTreeInit(void);
-bool controllerOutOfTreeTest(void);
-void controllerOutOfTree(control_t *control, const setpoint_t *setpoint, const sensorData_t *sensors, const state_t *state, const stabilizerStep_t stabilizerStep);
-#endif
-
-#endif //__CONTROLLER_H__
+#endif //__CONTROLLER_Mleso_H__
