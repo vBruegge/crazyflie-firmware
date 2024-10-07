@@ -88,6 +88,7 @@ void springGripperTask(void* arg)
             DEBUG_PRINT("Flapper landed!\n");
             activation = xTaskGetTickCount();
             gripperState = LANDED;
+            resetThrust();
           }
           break;
         case LANDED:

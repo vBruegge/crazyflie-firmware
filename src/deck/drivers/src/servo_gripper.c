@@ -34,7 +34,7 @@ void servoGripperInit(DeckInfo* info)
   
   pinMode(*activateGripperPin, INPUT);
   pinMode(*mosfetPin, OUTPUT);
-  DEBUG_PRINT("inited Gabber\n");
+  DEBUG_PRINT("Initialized Gripper\n");
 
   isInit = true;
 }
@@ -50,9 +50,6 @@ bool gripperTest(void)
   return testStatus;
 }
 
-//TODO: add test if throttle != 0
-//TODO: send zero throttle when landed?
-//TODO: add MOSFET
 void gripperTask(void* arg)
 {
   gripperState = IDLE;
@@ -94,7 +91,7 @@ void gripperTask(void* arg)
       }
       else {
         gripperState = RDY2LAND;
-        DEBUG_PRINT("Grripper ready to land!\n");
+        DEBUG_PRINT("Gripper ready to land!\n");
       }
     }
     else if(disengageGripper && gripperState == LANDED && getThrust() > 0.1f) {

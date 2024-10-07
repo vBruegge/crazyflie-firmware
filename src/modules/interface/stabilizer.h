@@ -44,4 +44,8 @@ void stabilizerInit(StateEstimatorType estimator);
  */
 bool stabilizerTest(void);
 
+
+float getThrust();
+void resetThrust();
+
 #endif /* STABILIZER_H_ */
