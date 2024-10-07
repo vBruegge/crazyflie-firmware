@@ -36,11 +36,11 @@
 #include "debug.h"
 
 static platformConfig_t configs[] = {
-#ifdef CONFIG_SENSORS_BMI088_BMP388
+#ifdef CONFIG_SENSORS_BMI088_BMP3XX
   {
     .deviceType = "CF21",
     .deviceTypeName = "Servo Gripper",
-    .sensorImplementation = SensorImplementation_bmi088_spi_bmp3xx,
+    .sensorImplementation = SensorImplementation_bmi088_bmp3xx,
     .physicalLayoutAntennasAreClose = true,
     .motorMap = motorMapDefaltConBrushless,
   },

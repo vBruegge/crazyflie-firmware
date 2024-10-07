@@ -36,7 +36,7 @@
 #include "debug.h"
 
 static platformConfig_t configs[] = {
-#ifdef CONFIG_SENSORS_BMI088_BMP388
+#ifdef CONFIG_SENSORS_BMI088_BMP3XX
   {
     .deviceType = "CF21",
     .deviceTypeName = "Spring Gripper",
