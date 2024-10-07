@@ -40,7 +40,7 @@ static platformConfig_t configs[] = {
   {
     .deviceType = "CF21",
     .deviceTypeName = "Spring Gripper",
-    .sensorImplementation = SensorImplementation_bmi088_bmp388,
+    .sensorImplementation = SensorImplementation_bmi088_bmp3xx,
     .physicalLayoutAntennasAreClose = true,
     .motorMap = motorMapDefaltConBrushless,
   },
@@ -49,14 +49,14 @@ static platformConfig_t configs[] = {
   {
     .deviceType = "CB10",
     .deviceTypeName = "Spring Gripper (Bolt 1.0)",
-    .sensorImplementation = SensorImplementation_bmi088_spi_bmp388,
+    .sensorImplementation = SensorImplementation_bmi088_spi_bmp3xx,
     .physicalLayoutAntennasAreClose = false,
     .motorMap = motorMapBoltBrushless,
   },
   {
     .deviceType = "CB11",
     .deviceTypeName = "Spring Gripper (Bolt 1.1)",
-    .sensorImplementation = SensorImplementation_bmi088_spi_bmp388,
+    .sensorImplementation = SensorImplementation_bmi088_spi_bmp3xx,
     .physicalLayoutAntennasAreClose = false,
     .motorMap = motorMapBolt11Brushless,
   }
