@@ -22,7 +22,7 @@ struct matXX {
 };
 
 static inline struct vecX mkvecX(int length, float vec[MAX_LENGTH]) {
-	struct vecX v = {.length length};
+	struct vecX v = {.length = length};
     memcpy(v.vec,vec,sizeof(vec));
 	return v;
 }
@@ -46,7 +46,7 @@ static inline struct vecX vbasisX(int length, int i) {
 }
 
 static inline struct vecX vneltX(int length, struct vecX v) {
-    struct vecX vec = {.length length};
+    struct vecX vec = {.length = length};
     for(int i = 0; i < length; i++) {
         vec.vec[i] = v.vec[i];
     }
@@ -77,7 +77,7 @@ static inline struct vecX vdiv(struct vecX v, float s) {
 static inline struct vecX vadd(struct vecX a, struct vecX b) {
     if(a.length == b.length)
     {
-        vecX v = {.length a.length};
+        vecX v = {.length = a.length};
         for(int i = 0; i < v.length; i++) {
             v.vec[i] = a.vec[i] + b.vec[i];
         }
@@ -144,7 +144,7 @@ static inline struct matXX mkmatXX(int r, int c, float mat[MAX_LENGTH][MAX_LENGT
 
 // matrix transpose.
 static inline struct matXX mtranspose(struct matXX m) {
-	struct matXX mt = {.colums m.rows, .rows m.colums};
+	struct matXX mt = {.colums = m.rows, .rows = m.colums};
 	for (int i = 0; i < MAX_LENGTH; ++i) {
 		for (int j = 0; j < MAX_LENGTH; ++j) {
 			mt.mat[i][j] = m.mat[j][i];
@@ -154,7 +154,7 @@ static inline struct matXX mtranspose(struct matXX m) {
 }
 // multiply a matrix by a scalar.
 static inline struct matXX mscl(float s, struct matXX a) {
-	struct matXX sa = {.colums a.colums, .rows a.rows};
+	struct matXX sa = {.colums = a.colums, .rows = a.rows};
 	for (int i = 0; i < sa.rows; ++i) {
 		for (int j = 0; j < sa.colums; ++j) {
 			sa.mat[i][j] = s * a.mat[i][j];
@@ -170,7 +170,7 @@ static inline struct matXX mneg(struct matXX a) {
 // multiply a matrix by a vector.
 static inline struct vecX mvmul(struct matXX a, struct vecX v) {
 	if(a.colums == v.length) {
-        struct vecX vec = {.length a.rows};
+        struct vecX vec = {.length = a.rows};
         for(int i = 0; i < a.rows; i++) {
             float tmp = 0;
             for(int j = 0; j < a.colums; j++) {
