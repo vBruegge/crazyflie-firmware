@@ -142,8 +142,8 @@
 #define UART2_TASK_PRI            3
 #define CRTP_SRV_TASK_PRI         0
 #define PLATFORM_SRV_TASK_PRI     0
-#define SRV_GRP_TASK_PRI        0
-#define SPRG_GRP_TASK_PRI       0
+#define SRV_GRP_TASK_PRI          0
+#define SPRG_GRP_TASK_PRI         0
 
 // Not compiled
 #if 0
