@@ -150,11 +150,11 @@ struct vecX mlesoModel(struct vecX actCmd, struct vecX stateP) {
   const struct matXX L0 = {.mat L0_EST, .rows NBR_STATES, .colums NBR_STATES};
   const struct matXX M0 = {.mat M0_EST, .rows NBR_STATES, .colums NBR_STATES};
 
-  struct vecX deltaState = vsub(stateP_hat, stateP);
-  struct vecX stateP_hat_dot =  vadd3(mvmul(Aref, stateP), mvmul(B, actCmd), mvmul(L0, deltaState));
-  struct vecX disturbance = mvmul(M0, deltaState);
+  struct vecX deltaState = vXsub(stateP_hat, stateP);
+  struct vecX stateP_hat_dot =  vXadd3(mvmul(Aref, stateP), mvmul(B, actCmd), mvmul(L0, deltaState));
+  struct vecX disturbance = mvXXmul(M0, deltaState);
 
-  stateP_hat = vadd(stateP_hat, vscl(UPDATE_DT, stateP_hat_dot));
+  stateP_hat = vXadd(stateP_hat, vXscl(UPDATE_DT, stateP_hat_dot));
 
   return vneltX(NBR_ACT, disturbance);
 }
@@ -181,11 +181,11 @@ void controllerMleso(control_t *control, const setpoint_t *setpoint,
 
     struct vecX stateFeedback = getStateFeedback(stateP);
 
-    struct vecX actCmdPWM = vsub(mvmul(Kr, setpointV), stateFeedback);
+    struct vecX actCmdPWM = vXsub(mvmul(Kr, setpointV), stateFeedback);
     struct vecX actCmd = convert2ActCmd(actCmdPWM);
 
     struct vecX disMatched = mlesoModel(actCmd, stateP);
-    struct vecX actCmdControl = vsub(actCmd, disMatched);
+    struct vecX actCmdControl = vXsub(actCmd, disMatched);
 
     struct vecX actCmdControlPWM = convert2PWMCmd(actCmd);
 
