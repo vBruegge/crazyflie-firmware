@@ -50,7 +50,7 @@ bool gripperTest(void)
   return testStatus;
 }
 
-void gripperTask(void* arg)
+void servoGripperTask(void* arg)
 {
   gripperState = IDLE;
   systemWaitStart();
