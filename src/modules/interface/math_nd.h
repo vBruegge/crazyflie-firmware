@@ -3,10 +3,13 @@
 
 #pragma once
 
+#define DEBUG_MODULE "MATH_ND"
+
 #include <math.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <string.h>
+#include "debug.h"
 
 #define MAX_LENGTH 9
 
@@ -53,6 +56,16 @@ static inline struct vecX vneltX(int length, struct vecX v) {
     return vec;
 }
 
+static inline void vcpyX(struct vecX dest, struct vecX src) {
+    if(dest.length == src.length) {
+        memcpy(dest.vec, src.vec, sizeof(src.length));
+    }
+    else {
+        DEBUG_PRINT("Dimension Error!");
+        memcpy(dest.vec, vzeroX(dest.length).vec, sizeof(dest.length));
+    }
+}
+
 // multiply a vector by a scalar.
 static inline struct vecX vXscl(float s, struct vecX v) {
     struct vecX vs = {.length = v.length};
@@ -84,8 +97,10 @@ static inline struct vecX vXadd(struct vecX a, struct vecX b) {
         }
         return v;
     }
-    else
-	return vzeroX(a.length);
+    else {
+        DEBUG_PRINT("Dimension Error in Addtion!");
+	    return vzeroX(a.length);
+    }
 }
 
 // subtract a vector from another vector.
@@ -105,22 +120,28 @@ static inline bool vXisnan(struct vecX v) {
 static inline struct vecX vXadd3(struct vecX a, struct vecX b, struct vecX c) {
     if(a.length == b.length && a.length == c.length)
 	    return vXadd(vXadd(a, b), c);
-    else
-        return vzeroX(a.length);
+    else {
+        DEBUG_PRINT("Dimension Error in Addtion!");
+	    return vzeroX(a.length);
+    }
 }
 // add 4 vectors.
 static inline struct vecX vXadd4(struct vecX a, struct vecX b, struct vecX c, struct vecX d) {
 	if(a.length == b.length && a.length == c.length && a.length == d.length)
 	    return vXadd(vXadd(a, b), vXadd(c, d));
-    else
-        return vzeroX(a.length);
+    else {
+        DEBUG_PRINT("Dimension Error in Addtion!");
+	    return vzeroX(a.length);
+    }   
 }
 // subtract b and c from a.
 static inline struct vecX vXsub2(struct vecX a, struct vecX b, struct vecX c) {
 	if(a.length == b.length && a.length == c.length)
 	    return vXadd3(a, vXneg(b), vXneg(c));
-    else
-        return vzeroX(a.length);
+    else {
+        DEBUG_PRINT("Dimension Error in Substraction!");
+	    return vzeroX(a.length);
+    }
 }
 
 static inline struct matXX mzeroXX(int r, int c) {
@@ -172,11 +193,15 @@ static inline struct vecX mvXXmul(struct matXX a, struct vecX v) {
         }
         if(!vXisnan(vec))
             return vec;
-        else
+        else {
+            DEBUG_PRINT("Element in vector is nan!");
             return vzeroX(a.rows);
+        }
     }
-    else
+    else {
+        DEBUG_PRINT("Dimension Error in Multiplication!");
 	    return vzeroX(a.rows);
+    }
 }
 
 #endif
