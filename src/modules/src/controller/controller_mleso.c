@@ -1,4 +1,4 @@
-#define DEBUG_MODULE "MLESO_debug"
+#define DEBUG_MODULE "MLESO_CONTROLLER"
 #include "stabilizer_types.h"
 
 #include "controller_mleso.h"
@@ -68,7 +68,6 @@ void controllerMlesoInit(void)
 {
   if (isInit)
     return;
-  DEBUG_PRINT("Initializing controller");
 
   static bool rateFiltEnable = ATTITUDE_RATE_LPF_ENABLE;
 
@@ -81,8 +80,6 @@ void controllerMlesoInit(void)
   pidSetDesired(&pidFeedbackRoll, 0.0f);
   pidSetDesired(&pidFeedbackPitch, 0.0f);
   pidSetDesired(&pidFeedbackYaw, 0.0f);
-
-  DEBUG_PRINT("Controller initialized");
 
   isInit = true;
 }
@@ -154,14 +151,7 @@ struct vecX mlesoModel(struct vecX actCmd, struct vecX stateP) {
   struct vecX stateP_hat_dot =  vXadd3(mvXXmul(Aref, stateP), mvXXmul(B, actCmd), mvXXmul(L0, deltaState));
   struct vecX disturbance = mvXXmul(M0, deltaState);
 
-  struct vecX stateUpdate = vXadd(stateP_hat, vXscl(UPDATE_DT, stateP_hat_dot));
-  if(stateUpdate.length == stateP_hat.length)
-    memcpy(stateP_hat.vec, stateUpdate.vec, sizeof(stateUpdate.vec));
-  else {
-      DEBUG_PRINT("Dimension Error!");
-      float zeros[NBR_STATES] = {0};
-      memcpy(stateP_hat.vec, zeros, sizeof(zeros));
-  }
+  vcpyX(stateP_hat, vXadd(stateP_hat, vXscl(UPDATE_DT, stateP_hat_dot)));
 
   return vneltX(NBR_ACT, disturbance);
 }
@@ -178,7 +168,7 @@ void controllerMleso(control_t *control, const setpoint_t *setpoint,
   //TODO: test is still yaw rate cmd
   float stpnt[NBR_STATES] = {setpoint->thrust, setpoint->attitude.roll, setpoint->attitude.pitch,
           setpoint->attitudeRate.yaw, 0, 0, 0, 0, 0};
-  struct vecX setpointV = mkvecX(NBR_STATES, stpnt);
+  struct vecX setpointV = mkvecX(NBR_ACT, stpnt);
 
   //drone state in order for MLESO controller (att_rate xyz, vel zxy, att xyz)
   float stateArray[NBR_STATES] = {sensors->gyro.x, sensors->gyro.y, sensors->gyro.z,
@@ -190,18 +180,18 @@ void controllerMleso(control_t *control, const setpoint_t *setpoint,
 
     struct vecX stateFeedback = getStateFeedback(stateP);
 
-    struct vecX actCmdPWM = vXsub(mvXXmul(Kr, setpointV), stateFeedback);
-    struct vecX actCmd = convert2ActCmd(actCmdPWM);
+    struct vecX actCmd = vXsub(mvXXmul(Kr, setpointV), stateFeedback);
+    vcpyX(actCmd, convert2ActCmd(actCmd));
 
     struct vecX disMatched = mlesoModel(actCmd, stateP);
-    struct vecX actCmdControl = vXsub(actCmd, disMatched);
+    vcpyX(actCmd, vXsub(actCmd, disMatched));
 
-    struct vecX actCmdControlPWM = convert2PWMCmd(actCmdControl);
+    vcpyX(actCmd, convert2PWMCmd(actCmd));
 
-    control->thrust = actCmdControlPWM.vec[0];
-    control->roll = saturateSignedInt16(actCmdControlPWM.vec[1]);
-    control->pitch = saturateSignedInt16(actCmdControlPWM.vec[2]);
-    control->yaw = saturateSignedInt16(actCmdControlPWM.vec[3]);
+    control->thrust = actCmd.vec[0];
+    control->roll = saturateSignedInt16(actCmd.vec[1]);
+    control->pitch = saturateSignedInt16(actCmd.vec[2]);
+    control->yaw = saturateSignedInt16(actCmd.vec[3]);
 
     control->yaw = -control->yaw;
 
@@ -221,8 +211,7 @@ void controllerMleso(control_t *control, const setpoint_t *setpoint,
       control->pitch = 0;
       control->yaw = 0;
 
-      float zeros[NBR_STATES] = {0};
-      memcpy(stateP_hat.vec, zeros, sizeof(zeros));
+      vcpyX(stateP_hat, vzeroX(stateP_hat.length));
 
       mlesoControllerResetAllPID();
 

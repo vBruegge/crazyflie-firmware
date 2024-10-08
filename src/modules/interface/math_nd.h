@@ -14,13 +14,13 @@
 #define MAX_LENGTH 9
 
 struct vecX {
-    const int length;
+    const uint8_t length;
     float vec[MAX_LENGTH];
 };
 
 struct matXX {
-    const int rows;
-    const int colums;
+    const uint8_t rows;
+    const uint8_t colums;
     float mat[MAX_LENGTH][MAX_LENGTH];
 };
 
@@ -200,6 +200,7 @@ static inline struct vecX mvXXmul(struct matXX a, struct vecX v) {
     }
     else {
         DEBUG_PRINT("Dimension Error in Multiplication!");
+        DEBUG_PRINT("Rows: %i * Length; %i", a.rows, v.length);
 	    return vzeroX(a.rows);
     }
 }
