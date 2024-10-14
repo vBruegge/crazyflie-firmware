@@ -1,4 +1,4 @@
-#define DEBUG_MODULE "SERVO_GRIPPER_DEBUG"
+#define DEBUG_MODULE "SERVO_GRIPPER"
 
 #include "FreeRTOS.h"
 #include "task.h"
