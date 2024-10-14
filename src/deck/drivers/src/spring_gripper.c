@@ -28,7 +28,6 @@ void springGripperInit()
     return;
 
   xTaskCreate(springGripperTask, SPRG_GRP_TASK_NAME, SPRG_GRP_TASK_STACKSIZE, NULL, SPRG_GRP_TASK_PRI, NULL);
-
   pinMode(*engageGripperPin, OUTPUT);
   pinMode(*disengageGripperPin, OUTPUT);
 

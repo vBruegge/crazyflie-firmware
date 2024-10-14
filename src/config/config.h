@@ -102,48 +102,6 @@
 #define PLATFORM_SRV_TASK_PRI   0
 #define SRV_GRP_TASK_PRI        0
 #define SPRG_GRP_TASK_PRI       0
-#define PASSTHROUGH_TASK_PRI      5
-#define STABILIZER_TASK_PRI       5
-#define RATE_SUPERVISOR_TASK_PRI  5
-#define SENSORS_TASK_PRI          4
-#define ADC_TASK_PRI              3
-#define FLOW_TASK_PRI             3
-#define MULTIRANGER_TASK_PRI      3
-#define SYSTEM_TASK_PRI           2
-#define CRTP_TX_TASK_PRI          2
-#define CRTP_RX_TASK_PRI          2
-#define EXTRX_TASK_PRI            2
-#define ZRANGER_TASK_PRI          2
-#define ZRANGER2_TASK_PRI         2
-#define LOG_TASK_PRI              1
-#define MEM_TASK_PRI              1
-#define PARAM_TASK_PRI            1
-#define PROXIMITY_TASK_PRI        0
-#define PM_TASK_PRI               0
-#define USDLOG_TASK_PRI           1
-#define USDWRITE_TASK_PRI         0
-#define PCA9685_TASK_PRI          2
-#define CMD_HIGH_LEVEL_TASK_PRI   2
-#define BQ_OSD_TASK_PRI           1
-#define GTGPS_DECK_TASK_PRI       1
-#define LIGHTHOUSE_TASK_PRI       3
-#define LPS_DECK_TASK_PRI         3
-#define OA_DECK_TASK_PRI          3
-#define UART1_TEST_TASK_PRI       1
-#define UART2_TEST_TASK_PRI       1
-#define KALMAN_TASK_PRI           2
-#define ERROR_UKF_TASK_PRI        2
-#define LEDSEQCMD_TASK_PRI        1
-#define FLAPPERDECK_TASK_PRI      2
-#define SYSLINK_TASK_PRI          3
-#define USBLINK_TASK_PRI          3
-#define ACTIVE_MARKER_TASK_PRI    3
-#define AI_DECK_TASK_PRI          1
-#define UART2_TASK_PRI            3
-#define CRTP_SRV_TASK_PRI         0
-#define PLATFORM_SRV_TASK_PRI     0
-#define SRV_GRP_TASK_PRI          0
-#define SPRG_GRP_TASK_PRI         0
 
 // Not compiled
 #if 0
@@ -203,8 +161,8 @@
 #define CPX_TASK_NAME             "CPX"
 #define APP_TASK_NAME             "APP"
 #define FLAPPERDECK_TASK_NAME     "FLAPPERDECK"
-#define SRV_GRP_TASK_NAME       "SRV-GRIPPERDECK"
-#define SPRG_GRP_TASK_NAME      "SPRG-GRIPPERDECK"
+#define SRV_GRP_TASK_NAME         "SRV-GRIPPERDECK"
+#define SPRG_GRP_TASK_NAME        "SPRG-GRIPPERDECK"
 
 
 //Task stack sizes
@@ -252,8 +210,8 @@
 #define KALMAN_TASK_STACKSIZE           (3 * configMINIMAL_STACK_SIZE)
 #define FLAPPERDECK_TASK_STACKSIZE      (2 * configMINIMAL_STACK_SIZE)
 #define ERROR_UKF_TASK_STACKSIZE        (4 * configMINIMAL_STACK_SIZE)
-#define SRV_GRP_TASK_STACKSIZE        configMINIMAL_STACK_SIZE
-#define SPRG_GRP_TASK_STACKSIZE       configMINIMAL_STACK_SIZE
+#define SRV_GRP_TASK_STACKSIZE          configMINIMAL_STACK_SIZE
+#define SPRG_GRP_TASK_STACKSIZE         configMINIMAL_STACK_SIZE
 
 
 //The radio channel. From 0 to 125
