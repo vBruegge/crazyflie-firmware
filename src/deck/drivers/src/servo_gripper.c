@@ -1,3 +1,5 @@
+#define DEBUG_MODULE "SERVO_GRIPPER_DEBUG"
+
 #include "FreeRTOS.h"
 #include "task.h"
 
@@ -13,7 +15,6 @@
 #include "stabilizer.h"
 #include "crtp_commander.h"
 
-#define DEBUG_MODULE "SERVO_GRIPPER_DEBUG"
 #define SERVO_ANGLE_OPEN 60
 #define SERVO_ANGLE_CLOSE 0
 
@@ -22,9 +23,9 @@ const deckPin_t* activateGripperPin = &DECK_GPIO_IO2;
 static int gripperState = IDLE;
 static bool disengageGripper = false;
 
-static bool isInit;
+static bool isInit = false;
 
-void servoGripperInit(DeckInfo* info)
+void servoGripperInit()
 {
   if (isInit)
     return;
@@ -111,7 +112,7 @@ void servoGripperTask(void* arg)
 
 static const DeckDriver servo_gripper = {
   .vid = 0xBC,
-  .pid = 0x09,
+  .pid = 0x13,
   .name = "bcServoGripper",
 
   

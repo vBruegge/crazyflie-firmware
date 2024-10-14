@@ -16,19 +16,19 @@
 #define REACTIVATION_TIME_MS 500
 #define ACTIVATION_TIME_MS 2000
 
-static bool isInit;
+static bool isInit = false;
 const deckPin_t* engageGripperPin = &DECK_GPIO_IO2; //PB5
 const deckPin_t* disengageGripperPin = &DECK_GPIO_IO1; //PB8
 static int gripperState = IDLE;
 static bool activateGripper = false;
 
-void springGripperInit(DeckInfo* info)
+void springGripperInit()
 {
   if (isInit)
     return;
 
   xTaskCreate(springGripperTask, SPRG_GRP_TASK_NAME, SPRG_GRP_TASK_STACKSIZE, NULL, SPRG_GRP_TASK_PRI, NULL);
-  
+
   pinMode(*engageGripperPin, OUTPUT);
   pinMode(*disengageGripperPin, OUTPUT);
 
@@ -137,7 +137,7 @@ void springGripperTask(void* arg)
 
 static const DeckDriver spring_gripper_deck = {
   .vid = 0xBC,
-  .pid = 0x09,
+  .pid = 0x14,
   .name = "bcSpringGripper",
 
   //TODO: add GPIO pins

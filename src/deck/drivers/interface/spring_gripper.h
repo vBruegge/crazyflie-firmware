@@ -1,8 +1,9 @@
 #ifndef _SPRING_GRIPPER_H
-#define _PRING_GRIPPER_H
+#define _SPRING_GRIPPER_H
 
 #include "deck_core.h"
 
+#ifdef CONFIG_PLATFORM_SPRING_GRIPPER
 enum gripperStates {
     IDLE = 0,
     RDY2LAND = 1,
@@ -11,8 +12,9 @@ enum gripperStates {
     ACTIVATING_GRIPPER_LANDED = 4,
     RELEASING_GRIPPER = 5,
 };
+#endif
 
-void springGripperInit(DeckInfo* info);
+void springGripperInit();
 
 bool springGripperTest(void);
 void springGripperTask(void* arg);

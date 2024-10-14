@@ -76,6 +76,8 @@
 #if CONFIG_ENABLE_CPX
   #include "cpxlink.h"
 #endif
+#include "servo_gripper.h"
+#include "spring_gripper.h"
 
 /* Private variable */
 static bool selftestPassed;
@@ -158,6 +160,13 @@ bool systemTest()
   pass &= pmTest();
   pass &= workerTest();
   pass &= buzzerTest();
+
+  #ifdef CONFIG_PLATFORM_SPRING_GRIPPER
+  pass &= springGripperTest();
+  #elif CONFIG_PLATFORM_SERVO_GRIPPER
+    pass &= servoGripperTest();
+  #endif
+
   return pass;
 }
 
@@ -216,6 +225,12 @@ void systemTask(void *arg)
 #ifdef PROXIMITY_ENABLED
   proximityInit();
 #endif
+
+  #ifdef CONFIG_PLATFORM_SPRING_GRIPPER
+    springGripperInit();
+  #elif CONFIG_PLATFORM_SERVO_GRIPPER
+    servoGripperInit();
+  #endif
 
   systemRequestNRFVersion();
 

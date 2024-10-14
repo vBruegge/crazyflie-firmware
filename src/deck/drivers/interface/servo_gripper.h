@@ -3,6 +3,7 @@
 
 #include "deck_core.h"
 
+#ifdef CONFIG_PLATFORM_SERVO_GRIPPER
 enum gripperStates {
     IDLE = 0,
     RDY2LAND = 1,
@@ -10,8 +11,9 @@ enum gripperStates {
     LANDED = 3,
     RELEASING_GRIPPER = 4,
 };
+#endif
 
-void servoGripperInit(DeckInfo* info);
+void servoGripperInit();
 
 bool servoGripperTest(void);
 void servoGripperTask(void* arg);
