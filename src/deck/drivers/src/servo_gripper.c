@@ -1,33 +1,36 @@
-  #define DEBUG_MODULE "SERVO_GRIPPER_DEBUG"
-#define SERVO_ANGLE_OPEN 60
-#define SERVO_ANGLE_CLOSE 0
-
 #include "FreeRTOS.h"
 #include "task.h"
 
 #include "deck.h"
 #include "system.h"
 #include "debug.h"
-#include "config.h"
-#include "servo_gripper.h"
-#include "servo.h"
-#include "crtp_commander.h"
 #include "log.h"
-#include "stabilizer.h"
+#include "servo_gripper.h"
+#include "autoconf.h"
+#include "config.h"
+#include "servo.h"
 
-static bool isInit;
+#include "stabilizer.h"
+#include "crtp_commander.h"
+
+#define DEBUG_MODULE "SERVO_GRIPPER_DEBUG"
+#define SERVO_ANGLE_OPEN 60
+#define SERVO_ANGLE_CLOSE 0
+
 const deckPin_t* mosfetPin = &DECK_GPIO_IO1;
 const deckPin_t* activateGripperPin = &DECK_GPIO_IO2;
 static int gripperState = IDLE;
 static bool disengageGripper = false;
+
+static bool isInit;
 
 void servoGripperInit(DeckInfo* info)
 {
   if (isInit)
     return;
 
-  xTaskCreate(servoGripperTask, SERVO_GRIPPER_TASK_NAME, SERVO_GRIPPER_TASK_STACKSIZE,
-        NULL, SERVO_GRIPPER_TASK_PRI, NULL);
+  xTaskCreate(servoGripperTask, SRV_GRP_TASK_NAME, SRV_GRP_TASK_STACKSIZE, NULL, SRV_GRP_TASK_PRI, NULL);
+
   servoInit();
   if(!servoTest())
     return;
@@ -57,7 +60,7 @@ void servoGripperTask(void* arg)
   //wait for take-off
   while(getThrust() < 0.1f) {
     continue;
-  }
+  }  
   digitalWrite(*mosfetPin, HIGH);
   servoSetAngle(SERVO_ANGLE_OPEN);
 
@@ -106,21 +109,21 @@ void servoGripperTask(void* arg)
   }
 }
 
-static const DeckDriver gripper_deck = {
-  .vid = 0x00,
-  .pid = 0x00,
+static const DeckDriver servo_gripper = {
+  .vid = 0xBC,
+  .pid = 0x09,
   .name = "bcServoGripper",
 
-  //TODO: add GPIO pins
+  
   .usedGpio = DECK_USING_IO_2 | DECK_USING_IO_1,
   .init = servoGripperInit,
   .test = servoGripperTest,
 };
 
-DECK_DRIVER(gripper_deck);
+DECK_DRIVER(servo_gripper);
 
-
+/*
 LOG_GROUP_START(servoGripper)
-LOG_ADD(LOG_INT16, gripperState, &gripperState)
-LOG_ADD(LOG_UINT8, disengageGripper, &disengageGripper)
-LOG_GROUP_STOP(servoGripper)
+LOG_ADD(LOG_UINT8, gripperStates, &gripperState)
+LOG_ADD(LOG_UINT8, activateGripper, &disengageGripper)
+LOG_GROUP_STOP(servoGripper)*/

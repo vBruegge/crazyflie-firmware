@@ -27,11 +27,12 @@ void springGripperInit(DeckInfo* info)
   if (isInit)
     return;
 
-  xTaskCreate(springGripperTask, SPRING_GRIPPER_TASK_NAME, SPRING_GRIPPER_TASK_STACKSIZE, NULL,
-            SPRING_GRIPPER_TASK_PRI, NULL);
+  xTaskCreate(springGripperTask, SPRG_GRP_TASK_NAME, SPRG_GRP_TASK_STACKSIZE, NULL, SPRG_GRP_TASK_PRI, NULL);
   
   pinMode(*engageGripperPin, OUTPUT);
   pinMode(*disengageGripperPin, OUTPUT);
+
+  DEBUG_PRINT("Initialized Gripper\n");
 
   isInit = true;
 }
@@ -134,9 +135,9 @@ void springGripperTask(void* arg)
     }
 }
 
-static const DeckDriver springGripper_deck = {
-  .vid = 0x00,
-  .pid = 0x00,
+static const DeckDriver spring_gripper_deck = {
+  .vid = 0xBC,
+  .pid = 0x09,
   .name = "bcSpringGripper",
 
   //TODO: add GPIO pins
@@ -146,10 +147,10 @@ static const DeckDriver springGripper_deck = {
   .test = springGripperTest,
 };
 
-DECK_DRIVER(springGripper_deck);
+DECK_DRIVER(spring_gripper_deck);
 
-
+/*
 LOG_GROUP_START(springGripper)
 LOG_ADD(LOG_INT16, gripperState, &gripperState)
 LOG_ADD(LOG_UINT8, activateGripper, &activateGripper)
-LOG_GROUP_STOP(springGripper)
+LOG_GROUP_STOP(springGripper)*/
